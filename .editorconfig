@@ -1,0 +1,45 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# 최상위 설정 파일
+root = true
+
+# 모든 파일에 적용되는 기본 설정
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Markdown 파일은 trailing whitespace 허용 (문법상 필요)
+[*.md]
+trim_trailing_whitespace = false
+
+# Python 파일은 들여쓰기 4칸
+[*.py]
+indent_size = 4
+
+# Makefile은 Tab 사용
+[Makefile]
+indent_style = tab
+
+# YAML 파일
+[*.{yml,yaml}]
+indent_size = 2
+
+# JSON 파일
+[*.json]
+indent_size = 2
+
+# HTML, CSS, SCSS
+[*.{html,css,scss,sass,less}]
+indent_size = 2
+
+# JavaScript, TypeScript, JSX, TSX
+[*.{js,jsx,ts,tsx}]
+indent_size = 2
+
+# Package.json 등
+[{package.json,.prettierrc,.eslintrc.json}]
+indent_size = 2
