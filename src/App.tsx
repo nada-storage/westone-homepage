@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FluidBackground } from './components/FluidBackground';
+import NeuralNoise from './NeuralNoise';
 import { CustomCursor } from './components/CustomCursor';
+import { ProjectDetail } from './components/ProjectDetail';
 import { PROJECTS, MENU_ITEMS, NEWS_ITEMS, DEFAULT_PROJECT } from './constants';
+import { PROJECT_DETAILS } from './data/projectDetails';
 import type { Project, MenuItem } from './types';
 
 // Icons
@@ -19,6 +22,8 @@ const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
   const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [detailProjectId, setDetailProjectId] = useState<string | null>(null);
+  const [returnToMenu, setReturnToMenu] = useState(false); // Track if we should return to menu on back
   const [currentTime, setCurrentTime] = useState("");
 
   // Update time
@@ -46,7 +51,45 @@ const App: React.FC = () => {
   }, [hoveredProjectId, isMenuOpen]);
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    if (detailProjectId) {
+      // If in detail mode, this button acts as "Back"
+      handleBack();
+    } else {
+      setIsMenuOpen(!isMenuOpen);
+    }
+  };
+
+  const handleOpenProject = (id: string, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    // Allow opening ANY project, check if we have details for it (we should satisfy all)
+    if (PROJECT_DETAILS[id]) {
+      setReturnToMenu(isMenuOpen); // Remember if we came from menu
+      setDetailProjectId(id);
+      setIsMenuOpen(false); // Always close menu to show detail full screen
+    }
+  };
+
+  const handleBack = () => {
+    setDetailProjectId(null);
+    if (returnToMenu) {
+      setIsMenuOpen(true);
+    }
+  };
+
+  const handleNextProject = () => {
+    if (!detailProjectId) return;
+    const currentIndex = PROJECTS.findIndex(p => p.id === detailProjectId);
+    const nextIndex = (currentIndex + 1) % PROJECTS.length;
+    const nextProject = PROJECTS[nextIndex];
+    setDetailProjectId(nextProject.id);
+    window.scrollTo(0, 0);
+  };
+
+  // Helper to get next project object for Footer
+  const getNextProject = (currentId: string) => {
+    const currentIndex = PROJECTS.findIndex(p => p.id === currentId);
+    const nextIndex = (currentIndex + 1) % PROJECTS.length;
+    return PROJECTS[nextIndex];
   };
 
   // Determine which project to show in the Menu (Active or Default)
@@ -59,8 +102,16 @@ const App: React.FC = () => {
       <CustomCursor />
 
       {/* Z-Layer 0: Background */}
-      <div className="absolute inset-0 z-0">
-        <FluidBackground mode={isMenuOpen ? 'light' : 'dark'} />
+      <div className="absolute inset-0 z-0 bg-black">
+        {/* Menu Background: Original Fluid (Light Mode) */}
+        <div className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
+          <FluidBackground mode="light" />
+        </div>
+
+        {/* Main Background: Neural Noise (Purple Gradient) */}
+        <div className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}>
+          <NeuralNoise />
+        </div>
 
         {/* Menu Background Color Interaction */}
         <AnimatePresence>
@@ -84,7 +135,9 @@ const App: React.FC = () => {
           className="group pointer-events-auto flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/20 transition-all duration-300 border border-white/5"
           data-hover="true"
         >
-          <span className="text-sm font-medium tracking-wide uppercase">{isMenuOpen ? 'Close' : 'Menu'}</span>
+          <span className="text-sm font-medium tracking-wide uppercase">
+            {isMenuOpen ? 'Close' : (detailProjectId ? 'Back' : 'Menu')}
+          </span>
           <div className={`w-2 h-2 rounded-full transition-colors ${isMenuOpen ? 'bg-black' : 'bg-white group-hover:bg-green-400'}`}></div>
         </button>
 
@@ -103,21 +156,33 @@ const App: React.FC = () => {
       {/* Main Content Area */}
       <AnimatePresence mode="wait">
         {!isMenuOpen ? (
-          <HeroSection key="hero" activeProject={activeProject} />
+          detailProjectId && PROJECT_DETAILS[detailProjectId] ? (
+            <ProjectDetail
+              key={detailProjectId}
+              onBack={handleBack}
+              details={PROJECT_DETAILS[detailProjectId]}
+              nextProject={getNextProject(detailProjectId)}
+              onNextProject={handleNextProject}
+            />
+          ) : (
+            <HeroSection key="hero" activeProject={activeProject} onOpenProject={handleOpenProject} />
+          )
         ) : (
           <MenuSection
             key="menu"
             displayProject={menuDisplayProject}
             onProjectHover={setHoveredProjectId}
+            onOpenProject={handleOpenProject}
           />
         )}
       </AnimatePresence>
 
-      {/* Sidebar Project List - Fixed Left (Only visible when Menu is CLOSED) */}
-      <div className={`transition-opacity duration-500 ${isMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+      {/* Sidebar Project List - Fixed Left (Only visible when Menu is CLOSED and NOT in detail view) */}
+      <div className={`transition-opacity duration-500 ${isMenuOpen || detailProjectId ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <SidebarProjects
           isMenuOpen={false}
           onHoverProject={(id) => setHoveredProjectId(id)}
+          onOpenProject={handleOpenProject}
         />
       </div>
 
@@ -131,9 +196,10 @@ const App: React.FC = () => {
 
 interface HeroSectionProps {
   activeProject: Project | null;
+  onOpenProject: (id: string) => void;
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({ activeProject }) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ activeProject, onOpenProject }) => {
   return (
     <motion.main
       className="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none"
@@ -147,11 +213,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ activeProject }) => {
           // Project Preview Mode
           <motion.div
             key="project-preview"
-            className="relative w-[60vw] h-[60vh] md:w-[50vw] md:h-[65vh] pointer-events-auto"
+            className="relative w-[60vw] h-[60vh] md:w-[50vw] md:h-[65vh] pointer-events-auto cursor-pointer"
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 1.05 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            onClick={() => onOpenProject(activeProject.id)}
           >
             <div className="w-full h-full rounded-xl overflow-hidden shadow-2xl relative group" data-hover="true">
               <img
@@ -197,9 +264,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ activeProject }) => {
 interface MenuSectionProps {
   displayProject: Project;
   onProjectHover: (id: string | null) => void;
+  onOpenProject: (id: string) => void;
 }
 
-const MenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProjectHover }) => {
+const MenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProjectHover, onOpenProject }) => {
   return (
     <motion.div
       className="absolute inset-0 z-20 flex flex-col pt-24 pb-8 px-6 md:px-12 w-full h-full"
@@ -230,6 +298,7 @@ const MenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProjectHove
                   project={project}
                   index={i}
                   onHover={onProjectHover}
+                  onClick={() => onOpenProject(project.id)}
                 />
               ))}
             </div>
@@ -336,13 +405,14 @@ const MenuLink: React.FC<{ item: MenuItem, index: number }> = ({ item, index }) 
   )
 }
 
-const MenuProjectPill: React.FC<{ project: Project; index: number; onHover: (id: string | null) => void }> = ({ project, index, onHover }) => {
+const MenuProjectPill: React.FC<{ project: Project; index: number; onHover: (id: string | null) => void; onClick: () => void }> = ({ project, index, onHover, onClick }) => {
   return (
     <motion.button
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.3 + (index * 0.05) }}
       onMouseEnter={() => onHover(project.id)}
+      onClick={onClick}
       // onMouseLeave={() => onHover(null)} // Keep selection active for better UX (handled by DEFAULT_PROJECT fallback in parent if needed, but we keep last selection)
       onMouseLeave={() => onHover(null)} // Revert to Default when leaving
       className="group flex items-center gap-3 px-3 py-2 rounded-full bg-gray-50 hover:bg-black transition-colors duration-300 w-full max-w-[200px]"
@@ -358,9 +428,10 @@ const MenuProjectPill: React.FC<{ project: Project; index: number; onHover: (id:
 interface SidebarProjectsProps {
   isMenuOpen: boolean;
   onHoverProject: (id: string | null) => void;
+  onOpenProject: (id: string, e?: React.MouseEvent) => void;
 }
 
-const SidebarProjects: React.FC<SidebarProjectsProps> = ({ isMenuOpen, onHoverProject }) => {
+const SidebarProjects: React.FC<SidebarProjectsProps> = ({ isMenuOpen, onHoverProject, onOpenProject }) => {
   return (
     <div className={`fixed left-4 md:left-8 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-30`}>
       <motion.span
@@ -377,6 +448,7 @@ const SidebarProjects: React.FC<SidebarProjectsProps> = ({ isMenuOpen, onHoverPr
           project={project}
           index={index}
           onHover={onHoverProject}
+          onClick={(e) => onOpenProject(project.id, e)}
         />
       ))}
 
@@ -392,7 +464,7 @@ const SidebarProjects: React.FC<SidebarProjectsProps> = ({ isMenuOpen, onHoverPr
   )
 }
 
-const ProjectPill: React.FC<{ project: Project; index: number; onHover: (id: string | null) => void }> = ({ project, index, onHover }) => {
+const ProjectPill: React.FC<{ project: Project; index: number; onHover: (id: string | null) => void; onClick: (e?: React.MouseEvent) => void }> = ({ project, index, onHover, onClick }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = () => {
@@ -417,6 +489,7 @@ const ProjectPill: React.FC<{ project: Project; index: number; onHover: (id: str
       <button
         type="button"
         data-hover="true"
+        onClick={onClick}
         className="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 border flex items-center justify-between gap-4 group relative overflow-hidden bg-white/5 border-white/5 text-white/80 hover:bg-white/10 hover:border-white/20 hover:text-white"
         style={{
           width: isHovered ? 'auto' : undefined,

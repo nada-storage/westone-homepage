@@ -22,3 +22,10 @@ export interface MenuItem {
     href: string;
     description: string;
 }
+
+export interface ScrollRevealProps {
+    children: React.ReactNode;
+    width?: "fit-content" | "100%";
+    delay?: number;
+    className?: string;
+}

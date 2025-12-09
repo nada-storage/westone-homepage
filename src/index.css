@@ -3,15 +3,50 @@
 @theme {
   --font-sans: "Inter", sans-serif;
   --font-serif: "Playfair Display", serif;
-  
+
   --color-meta-dark: #05050A;
   --color-meta-purple: #3B2F63;
+
+  --animate-marquee: marquee 50s linear infinite;
+  --animate-scroll: scroll 80s linear infinite;
+  --animate-shimmer: shimmer 2s infinite;
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes shimmer {
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: translateX(100%);
+    }
+  }
 }
 
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -27,5 +62,5 @@ body {
 
 /* Hide cursor on all elements by default */
 * {
-    cursor: none !important;
+  cursor: none !important;
 }
