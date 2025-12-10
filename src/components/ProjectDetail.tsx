@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ScrollReveal } from './ScrollReveal';
-import { Marquee } from './Marquee';
+import { DetailHeader } from './DetailHeader';
+import ScrollReveal from './ScrollReveal';
+import Marquee from './Marquee';
 import { ImageCarousel } from './ImageCarousel';
 import { Play, Mic, ArrowUpRight, Loader2, Pause, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -12,9 +13,10 @@ interface ProjectDetailProps {
     details: ProjectDetailContent;
     nextProject: Project;
     onNextProject: () => void;
+    onScroll: (isScrolled: boolean) => void;
 }
 
-export const ProjectDetail: React.FC<ProjectDetailProps> = ({ onBack, details, nextProject, onNextProject }) => {
+export const ProjectDetail: React.FC<ProjectDetailProps> = ({ onBack, details, nextProject, onNextProject, onScroll }) => {
     // State for Genre Interaction (Kept as is for structure/demo retention)
     const [activeGenre, setActiveGenre] = useState<'Jazz' | 'Lo-Fi' | 'Synth'>('Lo-Fi');
 
@@ -55,49 +57,25 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ onBack, details, n
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
+            onScroll={(e) => onScroll(e.currentTarget.scrollTop > 50)}
             className="bg-black min-h-screen text-white font-sans selection:bg-purple-500 selection:text-white pb-0 relative z-40 overflow-y-auto no-scrollbar h-screen w-full"
         >
 
-            {/* Hero Section */}
-            <section className="relative min-h-screen w-full flex flex-col justify-end pb-12 px-6 md:px-12 overflow-hidden">
-                <div className="absolute inset-0 z-0">
-                    <img
-                        src={details.media.hero}
-                        alt="Hero"
-                        className="w-full h-full object-cover opacity-60"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-                </div>
+            {/* Header & Hero Image */}
+            <DetailHeader
+                title={details.hero.title}
+                type={details.hero.type}
+                stage={details.hero.stage}
+                deliverables={details.hero.deliverables}
+            />
 
-                <div className="relative z-10 max-w-[1400px] mx-auto w-full pt-32">
-                    <ScrollReveal>
-                        <h1 className="text-[120px] md:text-[200px] font-serif leading-[0.85] tracking-tight mb-12 mix-blend-screen opacity-90">
-                            {details.hero.title}
-                        </h1>
-                    </ScrollReveal>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-white/20 pt-8">
-                        <ScrollReveal delay={100}>
-                            <div className="group cursor-pointer">
-                                <h3 className="text-xs font-semibold uppercase tracking-wider mb-2 text-gray-400 group-hover:text-white transition-colors">Project Type</h3>
-                                <p className="text-lg">{details.hero.type}</p>
-                            </div>
-                        </ScrollReveal>
-                        <ScrollReveal delay={200}>
-                            <div className="group cursor-pointer">
-                                <h3 className="text-xs font-semibold uppercase tracking-wider mb-2 text-gray-400 group-hover:text-white transition-colors">Stage</h3>
-                                <p className="text-lg">{details.hero.stage}</p>
-                            </div>
-                        </ScrollReveal>
-                        <ScrollReveal delay={300}>
-                            <div className="group cursor-pointer">
-                                <h3 className="text-xs font-semibold uppercase tracking-wider mb-2 text-gray-400 group-hover:text-white transition-colors">Deliverables</h3>
-                                <p className="text-lg">{details.hero.deliverables}</p>
-                            </div>
-                        </ScrollReveal>
-                    </div>
-                </div>
-            </section>
+            <div className="relative w-full h-[60vh] md:h-[80vh] overflow-hidden">
+                <img
+                    src={details.media.hero}
+                    alt="Hero"
+                    className="w-full h-full object-cover"
+                />
+            </div>
 
             {/* Introduction */}
             <section className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">

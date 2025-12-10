@@ -1,41 +1,53 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
-export const Marquee: React.FC<{ text: string }> = ({ text }) => {
+const defaultBrands = [
+    "Google", "Slack", "Uber", "Amazon", "Coinbase", "Headspace", "Pitch", "Notion", "Linear", "Figma"
+];
+
+interface MarqueeProps {
+    items?: string[];
+    text?: string;
+}
+
+const Marquee: React.FC<MarqueeProps> = ({ items, text }) => {
+    let displayItems: string[] = defaultBrands;
+
+    if (items && items.length > 0) {
+        displayItems = items;
+    } else if (text) {
+        displayItems = [text];
+    }
+
+    // Determine how many times to repeat to ensure it fills screen
+    // Simple heuristic: if fewer items, repeat more.
+    let repeatCount = 4;
+    if (displayItems.length < 5) repeatCount = 12;
+
+    const repeatedItems = Array(repeatCount).fill(displayItems).flat();
+
     return (
-        <div className="relative flex overflow-hidden py-12 md:py-24 bg-black border-y border-white/10">
-            {/* Gradient fade on sides */}
-            <div className="absolute left-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-r from-black to-transparent pointer-events-none"></div>
-            <div className="absolute right-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-l from-black to-transparent pointer-events-none"></div>
-
-            <div className="animate-marquee whitespace-nowrap flex items-center opacity-80 hover:opacity-100 transition-opacity duration-500">
-                <span className="text-[80px] md:text-[140px] font-serif italic leading-none mx-8 text-neutral-800">
-                    {text}
-                </span>
-                <span className="text-[80px] md:text-[140px] font-serif leading-none mx-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-white">
-                    {text}
-                </span>
-                <span className="text-[80px] md:text-[140px] font-serif italic leading-none mx-8 text-neutral-800">
-                    {text}
-                </span>
-                <span className="text-[80px] md:text-[140px] font-serif leading-none mx-8 text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-400">
-                    {text}
-                </span>
+        <section className="bg-black py-24 md:py-36 overflow-hidden">
+            <div className="flex whitespace-nowrap">
+                <motion.div
+                    className="flex gap-16 md:gap-32 items-center"
+                    animate={{ x: "-50%" }}
+                    transition={{
+                        repeat: Infinity,
+                        ease: "linear",
+                        duration: 50,
+                    }}
+                >
+                    {/* Repeat list multiple times to ensure seamless loop on large screens */}
+                    {repeatedItems.map((item, index) => (
+                        <span key={index} className="text-6xl md:text-9xl font-bold text-white serif opacity-90 cursor-default" data-hover="true">
+                            {item}
+                        </span>
+                    ))}
+                </motion.div>
             </div>
-
-            <div className="absolute top-0 animate-marquee whitespace-nowrap flex items-center opacity-80 hover:opacity-100 transition-opacity duration-500" aria-hidden="true" style={{ left: '100%' }}>
-                <span className="text-[80px] md:text-[140px] font-serif italic leading-none mx-8 text-neutral-800">
-                    {text}
-                </span>
-                <span className="text-[80px] md:text-[140px] font-serif leading-none mx-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-white">
-                    {text}
-                </span>
-                <span className="text-[80px] md:text-[140px] font-serif italic leading-none mx-8 text-neutral-800">
-                    {text}
-                </span>
-                <span className="text-[80px] md:text-[140px] font-serif leading-none mx-8 text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-400">
-                    {text}
-                </span>
-            </div>
-        </div>
+        </section>
     );
 };
+
+export default Marquee;
