@@ -1,5 +1,12 @@
 import React from 'react';
 
+export type CursorType = 'default' | 'play' | 'view' | 'drag' | 'hover';
+
+export interface CursorContextType {
+    cursorType: CursorType;
+    setCursorType: (type: CursorType) => void;
+}
+
 export interface Project {
     id: string;
     name: string;

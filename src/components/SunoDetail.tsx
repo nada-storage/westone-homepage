@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ScrollReveal } from './ScrollReveal';
-import { Marquee } from './Marquee';
+import ScrollReveal from './ScrollReveal';
+import Marquee from './Marquee';
 import { ImageCarousel } from './ImageCarousel';
 import { Play, Mic, ArrowUpRight, Loader2, Pause, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';

@@ -1,0 +1,61 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+
+const CinematicFrame = () => {
+    return (
+        <section className="bg-gray-100 py-32 md:py-56 px-4 md:px-12">
+            <div className="max-w-7xl mx-auto flex flex-col items-center">
+
+                {/* 
+            Frame Interaction Container 
+            - Effect: "Cinematic Slow Focus"
+            - Scale: 1.5 (Much Larger Start) -> 1.0
+            - Border: 150px (Very Thick) -> 20px (Standard)
+            - Duration: 3.5s (Very Slow) for a premium, heavy feel.
+        */}
+                <motion.div
+                    className="relative w-full max-w-4xl bg-black shadow-2xl"
+                    style={{ borderStyle: 'solid', borderColor: 'black' }}
+                    initial={{ scale: 1.5, opacity: 0, borderWidth: "150px" }}
+                    whileInView={{ scale: 1, opacity: 1, borderWidth: "20px" }}
+                    viewport={{ once: true, margin: "-10%" }}
+                    transition={{ duration: 3.5, ease: [0.16, 1, 0.3, 1] }}
+                >
+                    {/* Inner White Matting & Content Area */}
+                    <div className="bg-white w-full h-[600px] md:h-[800px] relative overflow-hidden p-4 md:p-8">
+                        <motion.div
+                            initial={{ scale: 1.4 }}
+                            whileInView={{ scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 3.8, ease: "easeOut" }}
+                            className="w-full h-full overflow-hidden"
+                        >
+                            <img
+                                src="https://picsum.photos/1200/1000?random=50"
+                                alt="Process"
+                                className="w-full h-full object-cover grayscale"
+                            />
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 1.2, duration: 1.5 }}
+                            className="absolute bottom-16 left-0 right-0 text-center pointer-events-none"
+                        >
+                            <div className="bg-black/90 text-white p-8 max-w-lg mx-auto backdrop-blur-md">
+                                <p className="serif text-xl md:text-2xl italic">
+                                    "I learned a huge amount about world-class product process through our work."
+                                </p>
+                                <p className="mt-4 text-sm text-gray-400 uppercase tracking-widest">Christian Reber - Pitch</p>
+                            </div>
+                        </motion.div>
+                    </div>
+                </motion.div>
+            </div>
+        </section>
+    );
+};
+
+export default CinematicFrame;
