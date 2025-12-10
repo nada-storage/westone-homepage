@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CursorProvider } from './context/CursorContext';
 import { FluidBackground } from './components/FluidBackground';
 import NeuralNoise from './NeuralNoise';
 import { CustomCursor } from './components/CustomCursor';
 import { ProjectDetail } from './components/ProjectDetail';
+import WhatWeDo from './components/WhatWeDo';
 import ContactSection from './components/ContactSection';
 import NewsSection from './components/NewsSection';
 import { PROJECTS, MENU_ITEMS, NEWS_ITEMS, DEFAULT_PROJECT } from './constants';
@@ -27,6 +29,7 @@ const App: React.FC = () => {
   const [detailProjectId, setDetailProjectId] = useState<string | null>(null);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [isNewsOpen, setIsNewsOpen] = useState(false);
+  const [isWhatWeDoOpen, setIsWhatWeDoOpen] = useState(false);
   const [returnToMenu, setReturnToMenu] = useState(false); // Track if we should return to menu on back
   const [currentTime, setCurrentTime] = useState("");
 
@@ -55,7 +58,7 @@ const App: React.FC = () => {
   }, [hoveredProjectId, isMenuOpen]);
 
   const toggleMenu = () => {
-    if (detailProjectId || isContactOpen || isNewsOpen) {
+    if (detailProjectId || isContactOpen || isNewsOpen || isWhatWeDoOpen) {
       // If in detail mode, contact mode, or news mode, this button acts as "Back"
       handleBack();
     } else {
@@ -77,6 +80,7 @@ const App: React.FC = () => {
     setDetailProjectId(null);
     setIsContactOpen(false);
     setIsNewsOpen(false);
+    setIsWhatWeDoOpen(false);
     if (returnToMenu) {
       setIsMenuOpen(true);
     }
@@ -91,6 +95,12 @@ const App: React.FC = () => {
   const handleOpenNews = () => {
     setReturnToMenu(true);
     setIsNewsOpen(true);
+    setIsMenuOpen(false);
+  };
+
+  const handleOpenWhatWeDo = () => {
+    setReturnToMenu(true);
+    setIsWhatWeDoOpen(true);
     setIsMenuOpen(false);
   };
 
@@ -114,103 +124,110 @@ const App: React.FC = () => {
   const menuDisplayProject = activeProject || DEFAULT_PROJECT;
 
   return (
-    <div className={`relative w-full h-screen overflow-hidden font-sans transition-colors duration-700 ${isMenuOpen ? 'text-black' : 'text-white'}`}>
+    <CursorProvider>
+      <div className={`relative w-full h-screen overflow-hidden font-sans transition-colors duration-700 ${isMenuOpen ? 'text-black' : 'text-white'}`}>
 
-      {/* Custom Cursor */}
-      <CustomCursor />
+        {/* Custom Cursor */}
+        <CustomCursor />
 
-      {/* Z-Layer 0: Background */}
-      <div className="absolute inset-0 z-0 bg-black">
-        {/* Menu Background: Original Fluid (Light Mode) */}
-        <div className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
-          <FluidBackground mode="light" />
+        {/* ... (rest of the component structure is preserved inside) ... */}
+
+        {/* Z-Layer 0: Background */}
+        <div className="absolute inset-0 z-0 bg-black">
+          {/* Menu Background: Original Fluid (Light Mode) */}
+          <div className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
+            <FluidBackground mode="light" />
+          </div>
+
+          {/* Main Background: Neural Noise (Purple Gradient) */}
+          <div className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}>
+            <NeuralNoise />
+          </div>
+
+          {/* Menu Background Color Interaction */}
+          <AnimatePresence>
+            {isMenuOpen && (
+              <motion.div
+                key="menu-bg-overlay"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.1, backgroundColor: menuDisplayProject.color }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                className="absolute inset-0 z-0 mix-blend-multiply pointer-events-none"
+              />
+            )}
+          </AnimatePresence>
         </div>
 
-        {/* Main Background: Neural Noise (Purple Gradient) */}
-        <div className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}>
-          <NeuralNoise />
-        </div>
+        {/* Z-Layer 50: Fixed Navigation Header */}
+        <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center p-6 md:p-8 text-white mix-blend-difference pointer-events-none">
+          <button
+            onClick={toggleMenu}
+            className="group pointer-events-auto flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/20 transition-all duration-300 border border-white/5"
+            data-hover="true"
+          >
+            <span className="text-sm font-medium tracking-wide uppercase">
+              {isMenuOpen ? 'Close' : (detailProjectId || isContactOpen || isNewsOpen || isWhatWeDoOpen ? 'Back' : 'Menu')}
+            </span>
+            <div className={`w-2 h-2 rounded-full transition-colors ${isMenuOpen ? 'bg-black' : 'bg-white group-hover:bg-green-400'}`}></div>
+          </button>
 
-        {/* Menu Background Color Interaction */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div
-              key="menu-bg-overlay"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.1, backgroundColor: menuDisplayProject.color }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className="absolute inset-0 z-0 mix-blend-multiply pointer-events-none"
+          <div className="absolute left-1/2 transform -translate-x-1/2 pointer-events-auto">
+            <span className="font-serif text-2xl font-bold tracking-tight">MetaDev</span>
+          </div>
+
+          <div className="flex items-center gap-4 text-sm font-medium tracking-wide opacity-80 pointer-events-auto">
+            <span>YYZ {currentTime}</span>
+            <div className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition cursor-pointer" data-hover="true">
+              <CameraIcon />
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content Area */}
+        <AnimatePresence mode="wait">
+          {!isMenuOpen ? (
+            isContactOpen ? (
+              <ContactSection key="contact" />
+            ) : isNewsOpen ? (
+              <NewsSection key="news" />
+            ) : isWhatWeDoOpen ? (
+              <WhatWeDo key="what-we-do" />
+            ) : detailProjectId && PROJECT_DETAILS[detailProjectId] ? (
+              <ProjectDetail
+                key={detailProjectId}
+                onBack={handleBack}
+                details={PROJECT_DETAILS[detailProjectId]}
+                nextProject={getNextProject(detailProjectId)}
+                onNextProject={handleNextProject}
+              />
+            ) : (
+              <HeroSection key="hero" activeProject={activeProject} onOpenProject={handleOpenProject} />
+            )
+          ) : (
+            <MenuSection
+              key="menu"
+              displayProject={menuDisplayProject}
+              onProjectHover={setHoveredProjectId}
+              onOpenProject={handleOpenProject}
+              onOpenContact={handleOpenContact}
+              onOpenNews={handleOpenNews}
+              onOpenWhatWeDo={handleOpenWhatWeDo}
             />
           )}
         </AnimatePresence>
-      </div>
 
-      {/* Z-Layer 50: Fixed Navigation Header */}
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center p-6 md:p-8 text-white mix-blend-difference pointer-events-none">
-        <button
-          onClick={toggleMenu}
-          className="group pointer-events-auto flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/20 transition-all duration-300 border border-white/5"
-          data-hover="true"
-        >
-          <span className="text-sm font-medium tracking-wide uppercase">
-            {isMenuOpen ? 'Close' : (detailProjectId || isContactOpen || isNewsOpen ? 'Back' : 'Menu')}
-          </span>
-          <div className={`w-2 h-2 rounded-full transition-colors ${isMenuOpen ? 'bg-black' : 'bg-white group-hover:bg-green-400'}`}></div>
-        </button>
-
-        <div className="absolute left-1/2 transform -translate-x-1/2 pointer-events-auto">
-          <span className="font-serif text-2xl font-bold tracking-tight">MetaDev</span>
-        </div>
-
-        <div className="flex items-center gap-4 text-sm font-medium tracking-wide opacity-80 pointer-events-auto">
-          <span>YYZ {currentTime}</span>
-          <div className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition cursor-pointer" data-hover="true">
-            <CameraIcon />
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content Area */}
-      <AnimatePresence mode="wait">
-        {!isMenuOpen ? (
-          isContactOpen ? (
-            <ContactSection key="contact" />
-          ) : isNewsOpen ? (
-            <NewsSection key="news" />
-          ) : detailProjectId && PROJECT_DETAILS[detailProjectId] ? (
-            <ProjectDetail
-              key={detailProjectId}
-              onBack={handleBack}
-              details={PROJECT_DETAILS[detailProjectId]}
-              nextProject={getNextProject(detailProjectId)}
-              onNextProject={handleNextProject}
-            />
-          ) : (
-            <HeroSection key="hero" activeProject={activeProject} onOpenProject={handleOpenProject} />
-          )
-        ) : (
-          <MenuSection
-            key="menu"
-            displayProject={menuDisplayProject}
-            onProjectHover={setHoveredProjectId}
+        {/* Sidebar Project List - Fixed Left (Only visible when Menu is CLOSED and NOT in detail view) */}
+        <div className={`transition-opacity duration-500 ${isMenuOpen || detailProjectId || isContactOpen || isNewsOpen || isWhatWeDoOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+          <SidebarProjects
+            isMenuOpen={false}
+            onHoverProject={(id) => setHoveredProjectId(id)}
             onOpenProject={handleOpenProject}
-            onOpenContact={handleOpenContact}
-            onOpenNews={handleOpenNews}
           />
-        )}
-      </AnimatePresence>
+        </div>
 
-      {/* Sidebar Project List - Fixed Left (Only visible when Menu is CLOSED and NOT in detail view) */}
-      <div className={`transition-opacity duration-500 ${isMenuOpen || detailProjectId || isContactOpen || isNewsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-        <SidebarProjects
-          isMenuOpen={false}
-          onHoverProject={(id) => setHoveredProjectId(id)}
-          onOpenProject={handleOpenProject}
-        />
       </div>
-
-    </div>
+    </CursorProvider>
   );
 };
 
@@ -291,9 +308,10 @@ interface MenuSectionProps {
   onOpenProject: (id: string) => void;
   onOpenContact: () => void;
   onOpenNews: () => void;
+  onOpenWhatWeDo: () => void;
 }
 
-const MenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProjectHover, onOpenProject, onOpenContact, onOpenNews }) => {
+const MenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProjectHover, onOpenProject, onOpenContact, onOpenNews, onOpenWhatWeDo }) => {
   return (
     <motion.div
       className="absolute inset-0 z-20 flex flex-col pt-24 pb-8 px-6 md:px-12 w-full h-full"
@@ -310,7 +328,7 @@ const MenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProjectHove
           {/* Main Nav Links */}
           <div className="flex flex-col space-y-0 mb-6 shrink-0">
             {MENU_ITEMS.map((item, index) => (
-              <MenuLink key={item.label} item={item} index={index} onOpenContact={onOpenContact} onOpenNews={onOpenNews} />
+              <MenuLink key={item.label} item={item} index={index} onOpenContact={onOpenContact} onOpenNews={onOpenNews} onOpenWhatWeDo={onOpenWhatWeDo} />
             ))}
           </div>
 
@@ -414,7 +432,7 @@ const MenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProjectHove
   );
 }
 
-const MenuLink: React.FC<{ item: MenuItem, index: number, onOpenContact: () => void, onOpenNews: () => void }> = ({ item, index, onOpenContact, onOpenNews }) => {
+const MenuLink: React.FC<{ item: MenuItem, index: number, onOpenContact: () => void, onOpenNews: () => void, onOpenWhatWeDo: () => void }> = ({ item, index, onOpenContact, onOpenNews, onOpenWhatWeDo }) => {
   const handleClick = (e: React.MouseEvent) => {
     if (item.href === '#contact') {
       e.preventDefault();
@@ -422,6 +440,9 @@ const MenuLink: React.FC<{ item: MenuItem, index: number, onOpenContact: () => v
     } else if (item.href === '#news') {
       e.preventDefault();
       onOpenNews();
+    } else if (item.href === '#what-we-do') {
+      e.preventDefault();
+      onOpenWhatWeDo();
     }
   };
 
