@@ -4,6 +4,8 @@ import { FluidBackground } from './components/FluidBackground';
 import NeuralNoise from './NeuralNoise';
 import { CustomCursor } from './components/CustomCursor';
 import { ProjectDetail } from './components/ProjectDetail';
+import ContactSection from './components/ContactSection';
+import NewsSection from './components/NewsSection';
 import { PROJECTS, MENU_ITEMS, NEWS_ITEMS, DEFAULT_PROJECT } from './constants';
 import { PROJECT_DETAILS } from './data/projectDetails';
 import type { Project, MenuItem } from './types';
@@ -23,6 +25,8 @@ const App: React.FC = () => {
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [detailProjectId, setDetailProjectId] = useState<string | null>(null);
+  const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isNewsOpen, setIsNewsOpen] = useState(false);
   const [returnToMenu, setReturnToMenu] = useState(false); // Track if we should return to menu on back
   const [currentTime, setCurrentTime] = useState("");
 
@@ -51,8 +55,8 @@ const App: React.FC = () => {
   }, [hoveredProjectId, isMenuOpen]);
 
   const toggleMenu = () => {
-    if (detailProjectId) {
-      // If in detail mode, this button acts as "Back"
+    if (detailProjectId || isContactOpen || isNewsOpen) {
+      // If in detail mode, contact mode, or news mode, this button acts as "Back"
       handleBack();
     } else {
       setIsMenuOpen(!isMenuOpen);
@@ -71,9 +75,23 @@ const App: React.FC = () => {
 
   const handleBack = () => {
     setDetailProjectId(null);
+    setIsContactOpen(false);
+    setIsNewsOpen(false);
     if (returnToMenu) {
       setIsMenuOpen(true);
     }
+  };
+
+  const handleOpenContact = () => {
+    setReturnToMenu(true);
+    setIsContactOpen(true);
+    setIsMenuOpen(false);
+  };
+
+  const handleOpenNews = () => {
+    setReturnToMenu(true);
+    setIsNewsOpen(true);
+    setIsMenuOpen(false);
   };
 
   const handleNextProject = () => {
@@ -136,7 +154,7 @@ const App: React.FC = () => {
           data-hover="true"
         >
           <span className="text-sm font-medium tracking-wide uppercase">
-            {isMenuOpen ? 'Close' : (detailProjectId ? 'Back' : 'Menu')}
+            {isMenuOpen ? 'Close' : (detailProjectId || isContactOpen || isNewsOpen ? 'Back' : 'Menu')}
           </span>
           <div className={`w-2 h-2 rounded-full transition-colors ${isMenuOpen ? 'bg-black' : 'bg-white group-hover:bg-green-400'}`}></div>
         </button>
@@ -156,7 +174,11 @@ const App: React.FC = () => {
       {/* Main Content Area */}
       <AnimatePresence mode="wait">
         {!isMenuOpen ? (
-          detailProjectId && PROJECT_DETAILS[detailProjectId] ? (
+          isContactOpen ? (
+            <ContactSection key="contact" />
+          ) : isNewsOpen ? (
+            <NewsSection key="news" />
+          ) : detailProjectId && PROJECT_DETAILS[detailProjectId] ? (
             <ProjectDetail
               key={detailProjectId}
               onBack={handleBack}
@@ -173,12 +195,14 @@ const App: React.FC = () => {
             displayProject={menuDisplayProject}
             onProjectHover={setHoveredProjectId}
             onOpenProject={handleOpenProject}
+            onOpenContact={handleOpenContact}
+            onOpenNews={handleOpenNews}
           />
         )}
       </AnimatePresence>
 
       {/* Sidebar Project List - Fixed Left (Only visible when Menu is CLOSED and NOT in detail view) */}
-      <div className={`transition-opacity duration-500 ${isMenuOpen || detailProjectId ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+      <div className={`transition-opacity duration-500 ${isMenuOpen || detailProjectId || isContactOpen || isNewsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <SidebarProjects
           isMenuOpen={false}
           onHoverProject={(id) => setHoveredProjectId(id)}
@@ -265,9 +289,11 @@ interface MenuSectionProps {
   displayProject: Project;
   onProjectHover: (id: string | null) => void;
   onOpenProject: (id: string) => void;
+  onOpenContact: () => void;
+  onOpenNews: () => void;
 }
 
-const MenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProjectHover, onOpenProject }) => {
+const MenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProjectHover, onOpenProject, onOpenContact, onOpenNews }) => {
   return (
     <motion.div
       className="absolute inset-0 z-20 flex flex-col pt-24 pb-8 px-6 md:px-12 w-full h-full"
@@ -284,7 +310,7 @@ const MenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProjectHove
           {/* Main Nav Links */}
           <div className="flex flex-col space-y-0 mb-6 shrink-0">
             {MENU_ITEMS.map((item, index) => (
-              <MenuLink key={item.label} item={item} index={index} />
+              <MenuLink key={item.label} item={item} index={index} onOpenContact={onOpenContact} onOpenNews={onOpenNews} />
             ))}
           </div>
 
@@ -388,10 +414,21 @@ const MenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProjectHove
   );
 }
 
-const MenuLink: React.FC<{ item: MenuItem, index: number }> = ({ item, index }) => {
+const MenuLink: React.FC<{ item: MenuItem, index: number, onOpenContact: () => void, onOpenNews: () => void }> = ({ item, index, onOpenContact, onOpenNews }) => {
+  const handleClick = (e: React.MouseEvent) => {
+    if (item.href === '#contact') {
+      e.preventDefault();
+      onOpenContact();
+    } else if (item.href === '#news') {
+      e.preventDefault();
+      onOpenNews();
+    }
+  };
+
   return (
     <motion.a
       href={item.href}
+      onClick={handleClick}
       className="block group relative py-0 w-fit whitespace-nowrap"
       initial={{ x: -20, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
