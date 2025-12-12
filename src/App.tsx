@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CursorProvider } from './context/CursorContext';
 import { FluidBackground } from './components/FluidBackground';
 import NeuralNoise from './NeuralNoise';
+import { ShowcaseBackground } from './components/ShowcaseBackground';
+import { ShowcaseDisplay } from './components/ShowcaseDisplay';
 import { CustomCursor } from './components/CustomCursor';
 import { ProjectDetail } from './components/ProjectDetail';
 import WhatWeDo from './components/WhatWeDo';
@@ -10,6 +12,7 @@ import ContactSection from './components/ContactSection';
 import NewsSection from './components/NewsSection';
 import { PROJECTS, MENU_ITEMS, NEWS_ITEMS, DEFAULT_PROJECT } from './constants';
 import { PROJECT_DETAILS } from './data/projectDetails';
+import { Navbar } from './components/Navbar';
 import type { Project, MenuItem } from './types';
 
 // Icons
@@ -32,6 +35,24 @@ const App: React.FC = () => {
   const [isWhatWeDoOpen, setIsWhatWeDoOpen] = useState(false);
   const [returnToMenu, setReturnToMenu] = useState(false); // Track if we should return to menu on back
   const [currentTime, setCurrentTime] = useState("");
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
+  const [isScrolled, setIsScrolled] = useState(false); // Global scroll state for Navbar
+
+  // Reset scroll state when navigating
+  useEffect(() => {
+    if (!detailProjectId && !isContactOpen && !isNewsOpen && !isWhatWeDoOpen) {
+      setIsScrolled(false);
+    }
+  }, [detailProjectId, isContactOpen, isNewsOpen, isWhatWeDoOpen]);
+
+  // Handle Resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Update time
   useEffect(() => {
@@ -120,6 +141,15 @@ const App: React.FC = () => {
     return PROJECTS[nextIndex];
   };
 
+  const handleLogoClick = () => {
+    setDetailProjectId(null);
+    setIsContactOpen(false);
+    setIsNewsOpen(false);
+    setIsWhatWeDoOpen(false);
+    setIsMenuOpen(false);
+    window.scrollTo(0, 0);
+  };
+
   // Determine which project to show in the Menu (Active or Default)
   const menuDisplayProject = activeProject || DEFAULT_PROJECT;
 
@@ -140,9 +170,15 @@ const App: React.FC = () => {
           </div>
 
           {/* Main Background: Neural Noise (Purple Gradient) */}
-          <div className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}>
+          {/* Main Background: Neural Noise (Purple Gradient) - Logic inverted for showcase */}
+          <div className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${isMenuOpen || (hoveredProjectId && isDesktop) ? 'opacity-0' : 'opacity-100'}`}>
             <NeuralNoise />
           </div>
+
+          {/* New Showcase Background (References Style) */}
+          {!isMenuOpen && isDesktop && (
+            <ShowcaseBackground projects={PROJECTS} activeId={hoveredProjectId} />
+          )}
 
           {/* Menu Background Color Interaction */}
           <AnimatePresence>
@@ -160,29 +196,13 @@ const App: React.FC = () => {
         </div>
 
         {/* Z-Layer 50: Fixed Navigation Header */}
-        <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center p-6 md:p-8 text-white mix-blend-difference pointer-events-none">
-          <button
-            onClick={toggleMenu}
-            className="group pointer-events-auto flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/20 transition-all duration-300 border border-white/5"
-            data-hover="true"
-          >
-            <span className="text-sm font-medium tracking-wide uppercase">
-              {isMenuOpen ? 'Close' : (detailProjectId || isContactOpen || isNewsOpen || isWhatWeDoOpen ? 'Back' : 'Menu')}
-            </span>
-            <div className={`w-2 h-2 rounded-full transition-colors ${isMenuOpen ? 'bg-black' : 'bg-white group-hover:bg-green-400'}`}></div>
-          </button>
-
-          <div className="absolute left-1/2 transform -translate-x-1/2 pointer-events-auto">
-            <span className="font-serif text-2xl font-bold tracking-tight">MetaDev</span>
-          </div>
-
-          <div className="flex items-center gap-4 text-sm font-medium tracking-wide opacity-80 pointer-events-auto">
-            <span>YYZ {currentTime}</span>
-            <div className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition cursor-pointer" data-hover="true">
-              <CameraIcon />
-            </div>
-          </div>
-        </header>
+        <Navbar
+          isMenuOpen={isMenuOpen}
+          toggleMenu={toggleMenu}
+          isScrolled={isScrolled}
+          onOpenContact={handleOpenContact}
+          onLogoClick={handleLogoClick}
+        />
 
         {/* Main Content Area */}
         <AnimatePresence mode="wait">
@@ -200,7 +220,10 @@ const App: React.FC = () => {
                 details={PROJECT_DETAILS[detailProjectId]}
                 nextProject={getNextProject(detailProjectId)}
                 onNextProject={handleNextProject}
+                onScroll={setIsScrolled}
               />
+            ) : hoveredProjectId && isDesktop && activeProject ? (
+              <ShowcaseDisplay key="showcase" activeProject={activeProject} />
             ) : (
               <HeroSection key="hero" activeProject={activeProject} onOpenProject={handleOpenProject} />
             )
@@ -220,7 +243,6 @@ const App: React.FC = () => {
         {/* Sidebar Project List - Fixed Left (Only visible when Menu is CLOSED and NOT in detail view) */}
         <div className={`transition-opacity duration-500 ${isMenuOpen || detailProjectId || isContactOpen || isNewsOpen || isWhatWeDoOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
           <SidebarProjects
-            isMenuOpen={false}
             onHoverProject={(id) => setHoveredProjectId(id)}
             onOpenProject={handleOpenProject}
           />
@@ -484,12 +506,11 @@ const MenuProjectPill: React.FC<{ project: Project; index: number; onHover: (id:
 }
 
 interface SidebarProjectsProps {
-  isMenuOpen: boolean;
   onHoverProject: (id: string | null) => void;
   onOpenProject: (id: string, e?: React.MouseEvent) => void;
 }
 
-const SidebarProjects: React.FC<SidebarProjectsProps> = ({ isMenuOpen, onHoverProject, onOpenProject }) => {
+const SidebarProjects: React.FC<SidebarProjectsProps> = ({ onHoverProject, onOpenProject }) => {
   return (
     <div className={`fixed left-4 md:left-8 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-30`}>
       <motion.span
@@ -510,14 +531,7 @@ const SidebarProjects: React.FC<SidebarProjectsProps> = ({ isMenuOpen, onHoverPr
         />
       ))}
 
-      <motion.button
-        className="mt-4 px-5 py-2 rounded-full text-xs font-semibold backdrop-blur-md border transition-all w-fit bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white"
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        data-hover="true"
-      >
-        All Work
-      </motion.button>
+
     </div>
   )
 }
@@ -548,7 +562,7 @@ const ProjectPill: React.FC<{ project: Project; index: number; onHover: (id: str
         type="button"
         data-hover="true"
         onClick={onClick}
-        className="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 border flex items-center justify-between gap-4 group relative overflow-hidden bg-white/5 border-white/5 text-white/80 hover:bg-white/10 hover:border-white/20 hover:text-white"
+        className="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 border flex items-center justify-between gap-4 group relative overflow-hidden bg-white/20 backdrop-blur-md border-white/10 text-white/80 hover:bg-white/30 hover:border-white/20 hover:text-white"
         style={{
           width: isHovered ? 'auto' : undefined,
         }}

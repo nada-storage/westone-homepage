@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { DetailHeader } from './DetailHeader';
 import ScrollReveal from './ScrollReveal';
 import Marquee from './Marquee';
 import { ImageCarousel } from './ImageCarousel';
@@ -7,9 +8,10 @@ import { motion } from 'framer-motion';
 
 interface SunoDetailProps {
     onBack: () => void;
+    onScroll: (isScrolled: boolean) => void;
 }
 
-export const SunoDetail: React.FC<SunoDetailProps> = ({ onBack }) => {
+export const SunoDetail: React.FC<SunoDetailProps> = ({ onBack, onScroll }) => {
     // State for Genre Interaction
     const [activeGenre, setActiveGenre] = useState<'Jazz' | 'Lo-Fi' | 'Synth'>('Lo-Fi');
 
@@ -50,49 +52,25 @@ export const SunoDetail: React.FC<SunoDetailProps> = ({ onBack }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
+            onScroll={(e) => onScroll(e.currentTarget.scrollTop > 50)}
             className="bg-black min-h-screen text-white font-sans selection:bg-purple-500 selection:text-white pb-0 relative z-40 overflow-y-auto no-scrollbar h-screen w-full"
         >
 
-            {/* Hero Section */}
-            <section className="relative min-h-screen w-full flex flex-col justify-end pb-12 px-6 md:px-12 overflow-hidden">
-                <div className="absolute inset-0 z-0">
-                    <img
-                        src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=2070&auto=format&fit=crop"
-                        alt="Suno Hero"
-                        className="w-full h-full object-cover opacity-60"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-                </div>
+            {/* Header & Hero Image */}
+            <DetailHeader
+                title="Suno"
+                type="Full Build"
+                stage="Startup"
+                deliverables="Product Design, Brand, Engineering"
+            />
 
-                <div className="relative z-10 max-w-[1400px] mx-auto w-full pt-32">
-                    <ScrollReveal>
-                        <h1 className="text-[120px] md:text-[200px] font-serif leading-[0.85] tracking-tight mb-12 mix-blend-screen opacity-90">
-                            Suno
-                        </h1>
-                    </ScrollReveal>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-white/20 pt-8">
-                        <ScrollReveal delay={100}>
-                            <div className="group cursor-pointer">
-                                <h3 className="text-xs font-semibold uppercase tracking-wider mb-2 text-gray-400 group-hover:text-white transition-colors">Project Type</h3>
-                                <p className="text-lg">Full Build</p>
-                            </div>
-                        </ScrollReveal>
-                        <ScrollReveal delay={200}>
-                            <div className="group cursor-pointer">
-                                <h3 className="text-xs font-semibold uppercase tracking-wider mb-2 text-gray-400 group-hover:text-white transition-colors">Stage</h3>
-                                <p className="text-lg">Startup</p>
-                            </div>
-                        </ScrollReveal>
-                        <ScrollReveal delay={300}>
-                            <div className="group cursor-pointer">
-                                <h3 className="text-xs font-semibold uppercase tracking-wider mb-2 text-gray-400 group-hover:text-white transition-colors">Deliverables</h3>
-                                <p className="text-lg">Product Design, Brand, Engineering</p>
-                            </div>
-                        </ScrollReveal>
-                    </div>
-                </div>
-            </section>
+            <div className="relative w-full h-[60vh] md:h-[80vh] overflow-hidden">
+                <img
+                    src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=2070&auto=format&fit=crop"
+                    alt="Suno Hero"
+                    className="w-full h-full object-cover"
+                />
+            </div>
 
             {/* Introduction */}
             <section className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">

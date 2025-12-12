@@ -7,6 +7,13 @@ export interface CursorContextType {
     setCursorType: (type: CursorType) => void;
 }
 
+export interface LayoutConfig {
+    titleStyles: string;
+    descriptionStyles: string;
+    imageWrapperStyles: string;
+    enterAnimation?: string;
+}
+
 export interface Project {
     id: string;
     name: string;
@@ -16,6 +23,13 @@ export interface Project {
     tags: string[];
     image: string;
     color: string;
+    // New Showcase Fields
+    bgImage?: string;
+    foregroundImage?: string;
+    foregroundType?: 'mobile' | 'desktop' | 'image' | 'none';
+    theme?: 'light' | 'dark';
+    accentColor?: string;
+    layoutConfig?: LayoutConfig;
 }
 
 export interface NewsItem {
