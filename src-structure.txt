@@ -1,0 +1,112 @@
+src/
+├── App.css
+├── App.tsx
+├── main.tsx
+├── index.css
+│
+├── assets/
+│   └── react.svg
+│
+├── components/
+│   ├── index.ts
+│   │
+│   ├── backgrounds/
+│   │   ├── index.ts
+│   │   ├── fluid-background.tsx
+│   │   └── neural-noise-background.tsx
+│   │
+│   ├── common/
+│   │   ├── index.ts
+│   │   │
+│   │   ├── cards/
+│   │   │   ├── index.ts
+│   │   │   └── news-card.tsx
+│   │   │
+│   │   └── forms/
+│   │       ├── index.ts
+│   │       └── input-fields.tsx
+│   │
+│   ├── interactive/
+│   │   ├── index.ts
+│   │   │
+│   │   ├── animations/
+│   │   │   ├── index.ts
+│   │   │   ├── cinematic-frame.tsx
+│   │   │   └── marquee.tsx
+│   │   │
+│   │   ├── carousel/
+│   │   │   ├── index.ts
+│   │   │   ├── draggable-carousel.tsx
+│   │   │   └── image-carousel.tsx
+│   │   │
+│   │   ├── cursor/
+│   │   │   ├── index.ts
+│   │   │   └── custom-cursor.tsx
+│   │   │
+│   │   └── scroll/
+│   │       ├── index.ts
+│   │       ├── horizontal-scroll.tsx
+│   │       └── scroll-reveal.tsx
+│   │
+│   ├── layout/
+│   │   ├── index.ts
+│   │   ├── detail-header.tsx
+│   │   └── navbar.tsx
+│   │
+│   ├── sections/
+│   │   ├── index.ts
+│   │   │
+│   │   ├── contact/
+│   │   │   ├── index.ts
+│   │   │   └── contact-section.tsx
+│   │   │
+│   │   ├── hero/
+│   │   │   ├── index.ts
+│   │   │   └── hero-video.tsx
+│   │   │
+│   │   ├── news/
+│   │   │   ├── index.ts
+│   │   │   └── news-section.tsx
+│   │   │
+│   │   └── services/
+│   │       ├── index.ts
+│   │       ├── process-grid.tsx
+│   │       ├── service-cards.tsx
+│   │       ├── service-categories.tsx
+│   │       └── what-we-do.tsx
+│   │
+│   ├── showcase/
+│   │   ├── index.ts
+│   │   ├── project-detail.tsx
+│   │   └── showcase-display.tsx
+│   │
+│   └── stats/
+│       ├── index.ts
+│       └── impact-stats.tsx
+│
+├── context/
+│   └── cursor-context.tsx
+│
+├── data/
+│   ├── constants/
+│   │   ├── menu.ts
+│   │   └── news.ts
+│   │
+│   └── projects/
+│       ├── index.ts
+│       ├── atlantic.ts
+│       ├── atoms.ts
+│       ├── calvin-klein.ts
+│       ├── headspace.ts
+│       ├── pitch.ts
+│       ├── ro.ts
+│       ├── suno.ts
+│       ├── uber.ts
+│       └── upwork.ts
+│
+└── types/
+    ├── index.ts
+    ├── common-types.ts
+    ├── form-types.ts
+    ├── project-types.ts
+    └── ui-types.ts
