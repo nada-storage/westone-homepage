@@ -1,20 +1,5 @@
-// Common
-export * from './common';
-
-// Layout
-export * from './layout';
-
-// Sections
-export * from './sections';
-
-// Showcase
-export * from './showcase';
-
-// Interactive
-export * from './interactive';
-
-// Backgrounds
+// Reusable UI Components
 export * from './backgrounds';
 
-// Stats
+// Legacy exports for backward compatibility (will be removed)
 export * from './stats';
