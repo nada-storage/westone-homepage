@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import { motion, useMotionValue, useTransform, MotionValue, animate, type PanInfo } from 'framer-motion';
-import { useCursor } from "@/context/cursor-context";
 
 interface Testimonial {
     id: number;
@@ -52,14 +51,13 @@ const DISPLAY_ITEMS: Testimonial[] = Array(RENDER_SETS).fill(ITEMS).flat();
 
 const DraggableCarousel = () => {
     const containerRef = useRef<HTMLDivElement>(null);
-    const { setCursorType } = useCursor();
 
     // Use a motion value to track the drag position globally
     const x = useMotionValue(0);
 
     // Handle Pan Gesture (Drag without moving the element)
-    const onPan = (e: any, info: PanInfo) => {
-        // Directly update x based on delta. 
+    const onPan = (_e: any, info: PanInfo) => {
+        // Directly update x based on delta.
         // This allows infinite movement without the element actually moving away.
         x.set(x.get() + info.delta.x);
     };
@@ -69,7 +67,7 @@ const DraggableCarousel = () => {
         x.stop();
     };
 
-    const onPanEnd = (e: any, info: PanInfo) => {
+    const onPanEnd = (_e: any, info: PanInfo) => {
         // Calculate target based on velocity ("throw")
         // Factor 0.12 reduces the throw distance (low sensitivity)
         const moveDistance = info.velocity.x * 0.12;

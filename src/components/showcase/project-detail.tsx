@@ -9,14 +9,12 @@ import type { ProjectDetailContent } from '../../types';
 import type { Project } from '../../types';
 
 interface ProjectDetailProps {
-    onBack: () => void;
     details: ProjectDetailContent;
     nextProject: Project;
     onNextProject: () => void;
-    onScroll: (isScrolled: boolean) => void;
 }
 
-export const ProjectDetail: React.FC<ProjectDetailProps> = ({ onBack, details, nextProject, onNextProject, onScroll }) => {
+export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProject, onNextProject }) => {
     // State for Genre Interaction (Kept as is for structure/demo retention)
     const [activeGenre, setActiveGenre] = useState<'Jazz' | 'Lo-Fi' | 'Synth'>('Lo-Fi');
 
@@ -57,8 +55,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ onBack, details, n
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
-            onScroll={(e) => onScroll(e.currentTarget.scrollTop > 50)}
-            className="bg-black min-h-screen text-white font-sans selection:bg-purple-500 selection:text-white pb-0 relative z-40 overflow-y-auto no-scrollbar h-screen w-full"
+            className="bg-black min-h-screen text-white font-sans selection:bg-purple-500 selection:text-white pb-0 relative z-40 w-full"
         >
 
             {/* Header & Hero Image */}

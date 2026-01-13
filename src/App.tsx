@@ -1,215 +1,120 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CursorProvider } from './context/cursor-context';
-import { FluidBackground } from '@/components/backgrounds';
-import { NeuralNoiseBackground } from '@/components/backgrounds';
-import { ShowcaseBackground, ShowcaseDisplay, ProjectDetail } from '@/components/showcase';
+import { UIProvider, useUI } from './context/ui-context';
+import { FluidBackground, NeuralNoiseBackground } from '@/components/backgrounds';
+import { ShowcaseBackground } from '@/components/showcase';
 import { CustomCursor } from '@/components/interactive/cursor';
-import { WhatWeDo } from '@/components/sections';
-import { ContactSection } from '@/components/sections';
-import { NewsSection } from '@/components/sections';
-import { HeroSection } from '@/components/sections/hero/hero-section';
-import { MenuSection } from '@/components/layout/menu/menu-section';
-import { SidebarProjects } from '@/components/layout/sidebar/sidebar-projects';
-import { PROJECTS, DEFAULT_PROJECT, PROJECT_DETAILS } from './data/projects';
+import { WhatWeDo } from '@/components/sections/services';
+import { ContactSection } from '@/components/sections/contact';
+import { NewsSection } from '@/components/sections/news';
 import { Navbar } from '@/components/layout';
-import type { Project } from './types';
+import { HomePage, ProjectDetailPage, MenuPage } from '@/pages';
+import { PROJECTS, DEFAULT_PROJECT } from './data/projects';
+import { useProjectNavigation, useHoverProject } from '@/hooks';
 
-const App: React.FC = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
-  const [activeProject, setActiveProject] = useState<Project | null>(null);
-  const [detailProjectId, setDetailProjectId] = useState<string | null>(null);
-  const [isContactOpen, setIsContactOpen] = useState(false);
-  const [isNewsOpen, setIsNewsOpen] = useState(false);
-  const [isWhatWeDoOpen, setIsWhatWeDoOpen] = useState(false);
-  const [returnToMenu, setReturnToMenu] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
-  const [isScrolled, setIsScrolled] = useState(false);
+const AppContent: React.FC = () => {
+  const {
+    isScrolled,
+    setIsScrolled,
+    isDesktop,
+    hoveredProjectId,
+    isHomePage,
+    isMenuPage,
+    isFullScreenPage,
+  } = useUI();
 
-  // Reset scroll state when navigating
-  useEffect(() => {
-    if (!detailProjectId && !isContactOpen && !isNewsOpen && !isWhatWeDoOpen) {
-      setIsScrolled(false);
-    }
-  }, [detailProjectId, isContactOpen, isNewsOpen, isWhatWeDoOpen]);
+  const {
+    goToHome,
+    goToMenu,
+    goToContact,
+    goBack,
+  } = useProjectNavigation();
 
-  // Handle Resize
-  useEffect(() => {
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 1024);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const activeProject = useHoverProject(hoveredProjectId);
 
-  // Update active project details when ID changes
-  useEffect(() => {
-    if (hoveredProjectId) {
-      const project = PROJECTS.find((p: Project) => p.id === hoveredProjectId);
-      setActiveProject(project || null);
-    }
-    else if (!isMenuOpen) {
-      setActiveProject(null);
-    }
-  }, [hoveredProjectId, isMenuOpen]);
-
+  // Toggle menu: go to menu or go back
   const toggleMenu = () => {
-    if (detailProjectId || isContactOpen || isNewsOpen || isWhatWeDoOpen) {
-      handleBack();
+    if (isMenuPage) {
+      goBack();
     } else {
-      setIsMenuOpen(!isMenuOpen);
+      goToMenu();
     }
-  };
-
-  const handleOpenProject = (id: string, e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    if (PROJECT_DETAILS[id]) {
-      setReturnToMenu(isMenuOpen);
-      setDetailProjectId(id);
-      setIsMenuOpen(false);
-    }
-  };
-
-  const handleBack = () => {
-    setDetailProjectId(null);
-    setIsContactOpen(false);
-    setIsNewsOpen(false);
-    setIsWhatWeDoOpen(false);
-    if (returnToMenu) {
-      setIsMenuOpen(true);
-    }
-  };
-
-  const handleOpenContact = () => {
-    setReturnToMenu(true);
-    setIsContactOpen(true);
-    setIsMenuOpen(false);
-  };
-
-  const handleOpenNews = () => {
-    setReturnToMenu(true);
-    setIsNewsOpen(true);
-    setIsMenuOpen(false);
-  };
-
-  const handleOpenWhatWeDo = () => {
-    setReturnToMenu(true);
-    setIsWhatWeDoOpen(true);
-    setIsMenuOpen(false);
-  };
-
-  const handleNextProject = () => {
-    if (!detailProjectId) return;
-    const currentIndex = PROJECTS.findIndex((p: Project) => p.id === detailProjectId);
-    const nextIndex = (currentIndex + 1) % PROJECTS.length;
-    const nextProject = PROJECTS[nextIndex];
-    setDetailProjectId(nextProject.id);
-    window.scrollTo(0, 0);
-  };
-
-  const getNextProject = (currentId: string) => {
-    const currentIndex = PROJECTS.findIndex((p: Project) => p.id === currentId);
-    const nextIndex = (currentIndex + 1) % PROJECTS.length;
-    return PROJECTS[nextIndex];
-  };
-
-  const handleLogoClick = () => {
-    setDetailProjectId(null);
-    setIsContactOpen(false);
-    setIsNewsOpen(false);
-    setIsWhatWeDoOpen(false);
-    setIsMenuOpen(false);
-    window.scrollTo(0, 0);
   };
 
   const menuDisplayProject = activeProject || DEFAULT_PROJECT;
 
+  // Determine background based on route
+  const showMenuBackground = isMenuPage;
+  const showShowcaseBackground = isHomePage && !isMenuPage && isDesktop;
+
   return (
-    <CursorProvider>
-      <div className={`relative w-full h-screen overflow-hidden font-sans transition-colors duration-700 ${isMenuOpen ? 'text-black' : 'text-white'}`}>
+    <div className={`relative w-full ${isFullScreenPage ? 'h-screen overflow-hidden' : 'min-h-screen'} font-sans transition-colors duration-700 ${isMenuPage ? 'text-black' : 'text-white'}`}>
 
-        <CustomCursor />
+      <CustomCursor />
 
-        {/* Z-Layer 0: Background */}
-        <div className="absolute inset-0 z-0 bg-black">
-          <div className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
-            <FluidBackground mode="light" />
-          </div>
-
-          <div className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${isMenuOpen || (hoveredProjectId && isDesktop) ? 'opacity-0' : 'opacity-100'}`}>
-            <NeuralNoiseBackground />
-          </div>
-
-          {!isMenuOpen && isDesktop && (
-            <ShowcaseBackground projects={PROJECTS} activeId={hoveredProjectId} />
-          )}
-
-          <AnimatePresence>
-            {isMenuOpen && (
-              <motion.div
-                key="menu-bg-overlay"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.1, backgroundColor: menuDisplayProject.color }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5 }}
-                className="absolute inset-0 z-0 mix-blend-multiply pointer-events-none"
-              />
-            )}
-          </AnimatePresence>
+      {/* Z-Layer 0: Background - Fixed */}
+      <div className={`${isFullScreenPage ? 'fixed' : 'absolute'} inset-0 z-0 bg-black`}>
+        <div className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${showMenuBackground ? 'opacity-100' : 'opacity-0'}`}>
+          <FluidBackground mode="light" />
         </div>
 
-        <Navbar
-          isMenuOpen={isMenuOpen}
-          toggleMenu={toggleMenu}
-          isScrolled={isScrolled}
-          onOpenContact={handleOpenContact}
-          onLogoClick={handleLogoClick}
-        />
+        <div className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${showMenuBackground || (hoveredProjectId && isDesktop) ? 'opacity-0' : 'opacity-100'}`}>
+          <NeuralNoiseBackground />
+        </div>
 
-        <AnimatePresence mode="wait">
-          {!isMenuOpen ? (
-            isContactOpen ? (
-              <ContactSection key="contact" />
-            ) : isNewsOpen ? (
-              <NewsSection key="news" />
-            ) : isWhatWeDoOpen ? (
-              <WhatWeDo key="what-we-do" />
-            ) : detailProjectId && PROJECT_DETAILS[detailProjectId] ? (
-              <ProjectDetail
-                key={detailProjectId}
-                onBack={handleBack}
-                details={PROJECT_DETAILS[detailProjectId]}
-                nextProject={getNextProject(detailProjectId)}
-                onNextProject={handleNextProject}
-                onScroll={setIsScrolled}
-              />
-            ) : hoveredProjectId && isDesktop && activeProject ? (
-              <ShowcaseDisplay key="showcase" activeProject={activeProject} />
-            ) : (
-              <HeroSection key="hero" activeProject={activeProject} onOpenProject={handleOpenProject} />
-            )
-          ) : (
-            <MenuSection
-              key="menu"
-              displayProject={menuDisplayProject}
-              onProjectHover={setHoveredProjectId}
-              onOpenProject={handleOpenProject}
-              onOpenContact={handleOpenContact}
-              onOpenNews={handleOpenNews}
-              onOpenWhatWeDo={handleOpenWhatWeDo}
+        {showShowcaseBackground && (
+          <ShowcaseBackground projects={PROJECTS} activeId={hoveredProjectId} />
+        )}
+
+        <AnimatePresence>
+          {isMenuPage && (
+            <motion.div
+              key="menu-bg-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.1, backgroundColor: menuDisplayProject.color }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              className="absolute inset-0 z-0 mix-blend-multiply pointer-events-none"
             />
           )}
         </AnimatePresence>
-
-        <div className={`transition-opacity duration-500 ${isMenuOpen || detailProjectId || isContactOpen || isNewsOpen || isWhatWeDoOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-          <SidebarProjects
-            onHoverProject={(id) => setHoveredProjectId(id)}
-            onOpenProject={handleOpenProject}
-          />
-        </div>
-
       </div>
+
+      {/* Navbar - Fixed */}
+      <Navbar
+        isMenuOpen={isMenuPage}
+        toggleMenu={toggleMenu}
+        isScrolled={isScrolled}
+        onOpenContact={goToContact}
+        onLogoClick={goToHome}
+      />
+
+      {/* Main Content */}
+      <div className={`relative z-10 ${isFullScreenPage ? 'h-screen' : 'min-h-screen'}`}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/menu" element={<MenuPage />} />
+          <Route path="/work/:projectId" element={<ProjectDetailPage onScroll={setIsScrolled} />} />
+          <Route path="/contact" element={<ContactSection />} />
+          <Route path="/news" element={<NewsSection />} />
+          <Route path="/what-we-do" element={<WhatWeDo />} />
+        </Routes>
+      </div>
+
+    </div>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <CursorProvider>
+      <Router>
+        <UIProvider>
+          <AppContent />
+        </UIProvider>
+      </Router>
     </CursorProvider>
   );
 };
