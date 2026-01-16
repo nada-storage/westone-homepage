@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const defaultBrands = [
-    "Google", "Slack", "Uber", "Amazon", "Coinbase", "Headspace", "Pitch", "Notion", "Linear", "Figma"
+    "Flutter", "Vite", "Express", "Next.js", "Unity", "OpenAI", "Figma", "AWS", "OCI"
 ];
 
 interface MarqueeProps {
@@ -35,7 +35,7 @@ const Marquee: React.FC<MarqueeProps> = ({ items, text }) => {
                     transition={{
                         repeat: Infinity,
                         ease: "linear",
-                        duration: 50,
+                        duration: 40,
                     }}
                 >
                     {/* Repeat list multiple times to ensure seamless loop on large screens */}

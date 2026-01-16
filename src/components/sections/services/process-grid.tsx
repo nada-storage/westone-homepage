@@ -6,37 +6,37 @@ const steps = [
     {
         id: "01",
         title: "Product focus",
-        desc: "We don't do marketing sites. We build functional software that powers businesses.",
+        desc: "마케팅 사이트가 아닌,\n실제로 작동하는 소프트웨어를 만듭니다.",
         image: "https://images.unsplash.com/photo-1555421689-d68471e189f2?auto=format&fit=crop&q=80&w=800"
     },
     {
         id: "02",
         title: "Co-founder mentality",
-        desc: "We act as true partners, pushing you and ourselves to find the best outcome.",
+        desc: "단순히 개발만 하지 않습니다.\n함께 고민하고, 더 나은 방향을 찾아갑니다.",
         image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=800"
     },
     {
         id: "03",
         title: "Track record",
-        desc: "Our products live in your home and on your phone and have done so for decades.",
+        desc: "우리가 만든 제품들은\n실제 사용자들의 일상에서 작동합니다.",
         image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800"
     },
     {
         id: "04",
         title: "Software not vaporware",
-        desc: "We deliver production-ready code and pixel-perfect design assets ready for scale.",
+        desc: "프로토타입이 아닌 프로덕션 레벨 코드,\n바로 배포 가능한 결과물을 만듭니다.",
         image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800"
     },
     {
         id: "05",
         title: "Startup pace",
-        desc: "We move fast, iterating quickly to get you to market sooner than the competition.",
+        desc: "빠르게 반복하며 시장에 먼저 도달합니다.\n속도가 경쟁력입니다.",
         image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=800"
     },
     {
         id: "06",
         title: "Small, world-class teams",
-        desc: "Dedicated teams of senior talent focused solely on your project's success.",
+        desc: "소수 정예로 움직이되,\n퀄리티는 절대 타협하지 않습니다.",
         image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800"
     }
 ];
@@ -144,7 +144,7 @@ const ProcessGrid = () => {
                                         }}
                                         className="mb-4"
                                     >
-                                        <p className="text-gray-300 text-lg md:text-xl leading-relaxed max-w-md">
+                                        <p className="text-gray-300 text-lg md:text-xl leading-relaxed max-w-md whitespace-pre-line">
                                             {step.desc}
                                         </p>
                                     </motion.div>

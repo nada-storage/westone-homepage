@@ -44,10 +44,11 @@ const CinematicFrame = () => {
                             className="absolute bottom-16 left-0 right-0 text-center pointer-events-none"
                         >
                             <div className="bg-black/90 text-white p-8 max-w-lg mx-auto backdrop-blur-md">
-                                <p className="serif text-xl md:text-2xl italic">
-                                    "I learned a huge amount about world-class product process through our work."
+                                <p className="serif text-xl md:text-2xl italic whitespace-pre-line">
+                                    "개발만 해주는 게 아니라{"\n"}
+                                    제품 방향까지 함께 고민해줬어요."
                                 </p>
-                                <p className="mt-4 text-sm text-gray-400 uppercase tracking-widest">Christian Reber - Pitch</p>
+                                <p className="mt-4 text-sm text-gray-400 uppercase tracking-widest">정현우 - Product Lead</p>
                             </div>
                         </motion.div>
                     </div>

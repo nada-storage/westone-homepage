@@ -6,25 +6,25 @@ const services = [
     {
         id: 1,
         title: "Defining a clear vision for the future",
-        description: "Whether you're an R&D team at a Fortune 500 or a founder with a paper napkin sketch, we shape, ideate, prototype, and conceive beloved products for your users.",
+        description: "• 아이디어 단계부터 함께합니다.\n• 리서치, 프로토타이핑, 검증을 거쳐\n\u00A0\u00A0사용자가 원하는 제품을 만듭니다.",
         image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=800"
     },
     {
         id: 2,
         title: "Set the bar for category defining design",
-        description: "If you've proven product market fit and want to ensure your user experience is best-in-class, performant, and scalable by design, we can help you make it pixel-perfect.",
+        description: "• 검증된 제품을 카테고리 최고 수준으로.\n• 퍼포먼스, 확장성, 완성도를 모두 갖춘\n\u00A0\u00A0디자인을 제공합니다.",
         image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=800"
     },
     {
         id: 3,
         title: "From strategic insight to implementation",
-        description: "We don't just design screens; we design businesses. Our strategy team works alongside you to validate assumptions, find fit, and build a roadmap for success.",
+        description: "• 전략 수립부터 실행까지 전 과정을 함께합니다.\n• 가설 검증, 시장 핏 확인, 성장 로드맵 설계까지 지원합니다.",
         image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800"
     },
     {
         id: 4,
         title: "Production code that scales with you",
-        description: "We build robust, production-ready software using modern stacks. No throwaway prototypes—just solid, scalable codebases ready for millions of users.",
+        description: "• 프로덕션 환경을 위한 견고한 코드베이스.\n• Modern stack 기반으로 확장 가능하고\n\u00A0\u00A0안정적인 시스템을 구축합니다.",
         image: "https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&q=80&w=800"
     }
 ];
@@ -106,7 +106,7 @@ const ServiceCards = () => {
 
                                         {/* Right: Description (Span 4) */}
                                         <div className="md:col-span-4 pl-0 md:pl-8">
-                                            <p className={`text-base md:text-xl leading-relaxed transition-colors duration-300 ${isHovered ? 'text-gray-300' : 'text-gray-500'}`}>
+                                            <p className={`text-base md:text-xl leading-relaxed transition-colors duration-300 whitespace-pre-wrap ${isHovered ? 'text-gray-300' : 'text-gray-500'}`}>
                                                 {service.description}
                                             </p>
                                         </div>

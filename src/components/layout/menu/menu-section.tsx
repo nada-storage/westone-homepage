@@ -165,15 +165,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProj
                         ))}
                     </div>
 
-                    <div className="pt-4 mt-auto border-t border-gray-100 shrink-0">
-                        <div className="flex justify-between text-[10px] uppercase tracking-wider text-gray-400">
-                            <span>© 2025 MetaDev</span>
-                            <div className="flex gap-4">
-                                <span className="cursor-pointer hover:text-black transition-colors" data-hover="true">Instagram</span>
-                                <span className="cursor-pointer hover:text-black transition-colors" data-hover="true">LinkedIn</span>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </motion.div>

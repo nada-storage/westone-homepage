@@ -49,9 +49,9 @@ export const PROJECT_DETAILS: Record<string, ProjectDetailContent> = {
 
 export const DEFAULT_PROJECT: Project = {
     id: 'default',
-    name: 'MetaDev',
+    name: 'Westone',
     client: 'Agency',
-    description: 'Designing the future of digital interaction.',
+    description: 'Building software that scales',
     year: '2025',
     tags: ['Agency', 'Showcase'],
     image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1000',

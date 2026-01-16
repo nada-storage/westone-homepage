@@ -98,19 +98,22 @@ const ContactSection: React.FC = () => {
                         <span className="italic">build.</span>
                     </h1>
 
-                    <div className="space-y-6 text-neutral-400 text-lg md:text-xl font-light leading-relaxed">
+                    <div className="space-y-6 text-neutral-400 text-lg md:text-xl font-light leading-relaxed whitespace-pre-line">
                         <p>
-                            Not sure where to start? We specialize in turning complex technical challenges into elegant, scalable software.
+                            어디서부터 시작할지 고민이신가요?{"\n"}
+                            복잡한 기술 과제를 우아하고 확장 가능한 {"\n"}
+                            소프트웨어로 만드는 것이 우리의 전문 분야입니다.
                         </p>
                         <p>
-                            Tell us about your product vision, your timeline, and where you are in the journey. We treat every project with the craftsmanship it deserves.
+                            제품 비전, 일정, 그리고 현재 어느 단계에 있는지 {"\n"}
+                            알려주세요. 모든 프로젝트를 정성껏 다룹니다.
                         </p>
                     </div>
 
                     <div className="mt-12 pt-8 border-t border-neutral-800">
                         <p className="text-white font-medium mb-2">Direct Contact</p>
-                        <a href="mailto:hello@agency.dev" className="text-neutral-500 hover:text-white transition-colors duration-300">
-                            hello@agency.dev
+                        <a href="mailto:namespace.nada@gmail.com" className="text-neutral-500 hover:text-white transition-colors duration-300">
+                            namespace.nada@gmail.com
                         </a>
                     </div>
                 </div>
@@ -124,7 +127,7 @@ const ContactSection: React.FC = () => {
                                 <TextInput
                                     id="name"
                                     name="name"
-                                    label="Name*"
+                                    label="이름*"
                                     placeholder="Enter your name"
                                     value={formData.name}
                                     onChange={handleChange}
@@ -135,7 +138,7 @@ const ContactSection: React.FC = () => {
                                 <TextInput
                                     id="email"
                                     name="email"
-                                    label="Email*"
+                                    label="이메일*"
                                     type="email"
                                     placeholder="Enter your email"
                                     value={formData.email}
@@ -149,7 +152,7 @@ const ContactSection: React.FC = () => {
                                 <TextInput
                                     id="source"
                                     name="source"
-                                    label="How did you hear of us?"
+                                    label="어떻게 알게 되셨나요?"
                                     placeholder="LinkedIn, Recommendation, etc."
                                     value={formData.source}
                                     onChange={handleChange}
@@ -159,7 +162,7 @@ const ContactSection: React.FC = () => {
                                 <SelectInput
                                     id="stage"
                                     name="stage"
-                                    label="What stage is your project?*"
+                                    label="프로젝트 단계*"
                                     value={formData.stage}
                                     options={stages}
                                     onChange={handleChange}
@@ -171,8 +174,8 @@ const ContactSection: React.FC = () => {
                             <TextAreaInput
                                 id="message"
                                 name="message"
-                                label="Message*"
-                                placeholder="Tell us about your project goals, stack preferences, or specific challenges..."
+                                label="메시지*"
+                                placeholder="프로젝트 목표, 선호하는 기술 스택, 구체적인 과제 등을 알려주세요..."
                                 value={formData.message}
                                 onChange={handleChange}
                                 error={errors.message}
@@ -198,7 +201,7 @@ const ContactSection: React.FC = () => {
                                         </svg>
                                     </div>
                                     <span className="text-neutral-500 group-hover:text-neutral-300 transition-colors select-none text-sm">
-                                        Keep me updated with tech insights
+                                        기술 인사이트 업데이트 받기
                                     </span>
                                 </label>
 

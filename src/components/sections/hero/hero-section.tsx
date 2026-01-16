@@ -50,11 +50,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ activeProject, onOpenP
                         transition={{ duration: 0.5 }}
                     >
                         <motion.p className="text-lg md:text-xl text-white/70 mb-6 max-w-lg mx-auto">
-                            Since 2018, we've helped the most innovative startups and reputable brands design, build, and ship products worth talking about.
+                            스타트업의 첫 프로덕트부터<br />
+                            기업의 리뉴얼까지,<br />
+                            좋은 아이디어가 좋은 제품이 되도록
                         </motion.p>
                         <motion.h1 className="font-serif text-6xl md:text-8xl lg:text-9xl leading-tight text-white mix-blend-overlay">
                             We make <br />
-                            <span className="italic">interfaces</span>
+                            <span className="italic">Experiences</span>
                         </motion.h1>
                     </motion.div>
                 )}

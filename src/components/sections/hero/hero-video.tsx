@@ -16,10 +16,10 @@ const HeroVideo = () => {
                     initial={{ y: 50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                    className="serif text-5xl md:text-8xl lg:text-9xl leading-[0.9] md:leading-[0.85] tracking-tight text-center md:text-left"
+                    className="serif text-5xl md:text-7xl lg:text-8xl leading-[1.2] tracking-tight text-center md:text-left"
                 >
-                    We used a product <br />
-                    <span className="text-gray-500 italic block mt-2 md:mt-0">we've built.</span>
+                    기술과 디자인, 두 언어로 <br />
+                    <span className="text-gray-500 italic block mt-2 md:mt-0">완성도 높은 제품을 만듭니다</span>
                 </motion.h1>
             </div>
 
@@ -64,38 +64,7 @@ const HeroVideo = () => {
                 </div>
             </motion.div>
 
-            {/* Bottom Description - Interactive reveal */}
-            <div className="w-full max-w-[90%] md:max-w-7xl px-4 md:px-12 mt-12 md:mt-20 grid grid-cols-1 md:grid-cols-12 gap-8">
-                <div className="hidden md:block md:col-span-4">
-                    <motion.div
-                        initial={{ scaleX: 0, originX: 0 }}
-                        whileInView={{ scaleX: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1, delay: 0.2 }}
-                        className="h-[1px] bg-gray-700 mb-4 w-12"
-                    />
-                    <motion.span
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1, delay: 0.4 }}
-                        className="text-xs font-mono text-gray-500 uppercase tracking-widest block"
-                    >
-                        Est. 2006 — San Francisco
-                    </motion.span>
-                </div>
-                <div className="md:col-span-8">
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                        className="text-xl md:text-3xl font-light text-gray-300 leading-relaxed"
-                    >
-                        Since 2006, we've helped shape the technology landscape building breakthrough products.
-                    </motion.p>
-                </div>
-            </div>
+
 
         </section>
     );

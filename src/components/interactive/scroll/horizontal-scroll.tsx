@@ -2,13 +2,13 @@ import React, { useRef, useEffect, useState } from 'react';
 import { motion, useMotionValue, useTransform, MotionValue, animate } from 'framer-motion';
 
 const baseItems = [
-    { id: 1, img: "https://picsum.photos/600/800?random=1", title: "Mobile First" },
+    { id: 1, img: "https://picsum.photos/600/800?random=1", title: "Dashboards" },
     { id: 2, img: "https://picsum.photos/800/600?random=2", title: "Web Apps" },
-    { id: 3, img: "https://picsum.photos/600/800?random=3", title: "E-Commerce" },
-    { id: 4, img: "https://picsum.photos/800/600?random=4", title: "Dashboards" },
-    { id: 5, img: "https://picsum.photos/600/800?random=5", title: "Social Platforms" },
-    { id: 6, img: "https://picsum.photos/800/600?random=6", title: "Design Systems" },
-    { id: 7, img: "https://picsum.photos/600/800?random=7", title: "IoT Interfaces" },
+    { id: 3, img: "https://picsum.photos/600/800?random=3", title: "Interfaces" },
+    { id: 4, img: "https://picsum.photos/800/600?random=4", title: "Mobile" },
+    { id: 5, img: "https://picsum.photos/600/800?random=5", title: "AI" },
+    { id: 6, img: "https://picsum.photos/800/600?random=6", title: "Server" },
+    { id: 7, img: "https://picsum.photos/600/800?random=7", title: "Design Systems" },
 ];
 
 interface ScrollItemProps {

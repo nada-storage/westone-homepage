@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
 
 const stats = [
-    { label: "Global users reached", value: "2.2B" },
-    { label: "Products shipped", value: "455" },
-    { label: "Unicorns shipped", value: "18" }
+    { label: "Project Success Rate", value: "95%" },
+    { label: "Client Retention Rate", value: "80%" },
+    { label: "Avg. Response Time", value: "< 24h" }
 ];
 
 const ImpactStats = () => {
@@ -15,8 +15,8 @@ const ImpactStats = () => {
       */}
             <div className="w-full mx-auto mb-32">
                 <h2 className="serif text-5xl md:text-8xl leading-none mb-24">
-                    We measure our value in <br />
-                    <span className="text-gray-500 italic">real-world impact</span>
+                    우리의 가치는 <br />
+                    <span className="text-gray-500 italic">실제 결과로 증명합니다</span>
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 border-t border-gray-800 pt-12">
