@@ -32,9 +32,9 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
     };
 
     // Helper to ensure we have an array of images for the widget
-    const widgetImages = Array.isArray(details.media.hero)
+    const widgetImages = details.media.widgetImages || (Array.isArray(details.media.hero)
         ? details.media.hero
-        : [details.media.hero, details.media.hero, details.media.hero]; // Fallback for single image projects
+        : [details.media.hero, details.media.hero, details.media.hero]); // Fallback for single image projects
 
     // Vision Play Interaction
     const [isPlayingVision, setIsPlayingVision] = useState(false);
@@ -180,11 +180,11 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
 
                     <div className="md:col-span-8 space-y-8 relative z-10">
                         <ScrollReveal>
-                            <div className="relative aspect-[16/10] bg-neutral-900 rounded-lg overflow-hidden group">
+                            <div className="relative aspect-[16/10] bg-neutral-900 rounded-lg overflow-hidden group px-24">
                                 <img
                                     src={isPlayingVision ? (details.media.visionToggle2 || details.media.visionGrid2) : (details.media.visionToggle1 || details.media.visionGrid1)}
                                     alt="Interface"
-                                    className={`object-cover w-full h-full transition-all duration-1000 group-hover:scale-105 ${isPlayingVision ? 'opacity-100 object-bottom' : 'opacity-80 object-center'}`}
+                                    className={`object-cover w-full h-full rounded-lg transition-all duration-[3s] ease-in-out group-hover:scale-105 ${isPlayingVision ? 'opacity-100 object-top' : 'opacity-80 object-center'}`}
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                                 <div className="absolute bottom-8 left-8 right-8">
@@ -217,7 +217,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                             </ScrollReveal>
                             <ScrollReveal delay={200}>
                                 <div className="aspect-square bg-neutral-800 rounded-lg overflow-hidden relative group">
-                                    <img src={details.media.visionGrid2} className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" alt="Detail 2" />
+                                    <img src={details.media.visionGrid2} className="object-cover object-top w-full h-full transition-transform duration-700 group-hover:scale-110" alt="Detail 2" />
                                     <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                         <span className="font-serif italic text-2xl">{details.vision.image3HoverText}</span>
                                     </div>
@@ -292,33 +292,46 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                         {/* Card with text */}
                         <ScrollReveal delay={100}>
                             <div className="w-full aspect-[16/9] rounded-lg relative overflow-hidden group flex bg-black">
-                                {/* Left Half - Top Image */}
-                                <div className="w-1/2 h-full relative overflow-hidden">
-                                    <div
-                                        className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105"
-                                        style={{
-                                            backgroundImage: `url(${details.media.auraCard})`,
-                                            backgroundSize: '100% 200%',
-                                            backgroundPosition: 'center top',
-                                            backgroundRepeat: 'no-repeat'
-                                        }}
-                                    />
-                                    <div className="absolute inset-0 bg-black/20"></div>
-                                </div>
+                                {details.id === 'recycler' ? (
+                                    <div className="w-full h-full relative overflow-hidden">
+                                        <img
+                                            src={details.media.auraCard}
+                                            alt="Aura Card"
+                                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                        />
+                                        <div className="absolute inset-0 bg-black/20"></div>
+                                    </div>
+                                ) : (
+                                    <>
+                                        {/* Left Half - Top Image */}
+                                        <div className="w-1/2 h-full relative overflow-hidden">
+                                            <div
+                                                className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105"
+                                                style={{
+                                                    backgroundImage: `url(${details.media.auraCard})`,
+                                                    backgroundSize: '100% 200%',
+                                                    backgroundPosition: 'center top',
+                                                    backgroundRepeat: 'no-repeat'
+                                                }}
+                                            />
+                                            <div className="absolute inset-0 bg-black/20"></div>
+                                        </div>
 
-                                {/* Right Half - Bottom Image */}
-                                <div className="w-1/2 h-full relative overflow-hidden">
-                                    <div
-                                        className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105"
-                                        style={{
-                                            backgroundImage: `url(${details.media.auraCard})`,
-                                            backgroundSize: '100% 200%',
-                                            backgroundPosition: 'center bottom',
-                                            backgroundRepeat: 'no-repeat'
-                                        }}
-                                    />
-                                    <div className="absolute inset-0 bg-black/20"></div>
-                                </div>
+                                        {/* Right Half - Bottom Image */}
+                                        <div className="w-1/2 h-full relative overflow-hidden">
+                                            <div
+                                                className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105"
+                                                style={{
+                                                    backgroundImage: `url(${details.media.auraCard})`,
+                                                    backgroundSize: '100% 200%',
+                                                    backgroundPosition: 'center bottom',
+                                                    backgroundRepeat: 'no-repeat'
+                                                }}
+                                            />
+                                            <div className="absolute inset-0 bg-black/20"></div>
+                                        </div>
+                                    </>
+                                )}
 
                                 {/* Color Overlay */}
                                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/80 to-purple-900/40 mix-blend-hard-light pointer-events-none"></div>
@@ -392,33 +405,46 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
 
                             <ScrollReveal delay={200} className="flex-1">
                                 <div className="w-full h-full rounded-lg relative overflow-hidden group flex bg-black">
-                                    {/* Left Half - Top Image */}
-                                    <div className="w-1/2 h-full relative overflow-hidden">
-                                        <div
-                                            className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105"
-                                            style={{
-                                                backgroundImage: `url(${details.media.auraCard})`,
-                                                backgroundSize: '100% 200%',
-                                                backgroundPosition: 'center top',
-                                                backgroundRepeat: 'no-repeat'
-                                            }}
-                                        />
-                                        <div className="absolute inset-0 bg-black/20"></div>
-                                    </div>
+                                    {details.id === 'recycler' ? (
+                                        <div className="w-full h-full relative overflow-hidden">
+                                            <img
+                                                src={details.media.auraCard}
+                                                alt="Aura Card"
+                                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                            />
+                                            <div className="absolute inset-0 bg-black/20"></div>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            {/* Left Half - Top Image */}
+                                            <div className="w-1/2 h-full relative overflow-hidden">
+                                                <div
+                                                    className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105"
+                                                    style={{
+                                                        backgroundImage: `url(${details.media.auraCard})`,
+                                                        backgroundSize: '100% 200%',
+                                                        backgroundPosition: 'center top',
+                                                        backgroundRepeat: 'no-repeat'
+                                                    }}
+                                                />
+                                                <div className="absolute inset-0 bg-black/20"></div>
+                                            </div>
 
-                                    {/* Right Half - Bottom Image */}
-                                    <div className="w-1/2 h-full relative overflow-hidden">
-                                        <div
-                                            className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105"
-                                            style={{
-                                                backgroundImage: `url(${details.media.auraCard})`,
-                                                backgroundSize: '100% 200%',
-                                                backgroundPosition: 'center bottom',
-                                                backgroundRepeat: 'no-repeat'
-                                            }}
-                                        />
-                                        <div className="absolute inset-0 bg-black/20"></div>
-                                    </div>
+                                            {/* Right Half - Bottom Image */}
+                                            <div className="w-1/2 h-full relative overflow-hidden">
+                                                <div
+                                                    className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105"
+                                                    style={{
+                                                        backgroundImage: `url(${details.media.auraCard})`,
+                                                        backgroundSize: '100% 200%',
+                                                        backgroundPosition: 'center bottom',
+                                                        backgroundRepeat: 'no-repeat'
+                                                    }}
+                                                />
+                                                <div className="absolute inset-0 bg-black/20"></div>
+                                            </div>
+                                        </>
+                                    )}
 
                                     {/* Color Overlay */}
                                     <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/80 to-purple-900/40 mix-blend-hard-light pointer-events-none"></div>
@@ -486,13 +512,10 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                                                         className="w-full h-full object-cover rounded-xl"
                                                         alt="Album Art"
                                                     />
-                                                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <Pause className="w-12 h-12 text-white fill-white" />
-                                                    </div>
+
                                                 </div>
 
                                                 <div className="mb-6">
-                                                    <h4 className="text-2xl font-serif text-white mb-1">특정 매장 찾기</h4>
                                                     <p className="text-gray-400 text-sm">Generated</p>
                                                 </div>
 
@@ -533,7 +556,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                 <div className="max-w-[1400px] mx-auto px-6 md:px-12 mb-12">
                     <ScrollReveal>
                         <span className="block text-sm font-semibold uppercase tracking-wider mb-6 text-gray-400">Discovery</span>
-                        <h3 className="text-3xl md:text-5xl font-serif max-w-2xl">
+                        <h3 className="text-3xl md:text-5xl font-serif max-w-2xl py-10">
                             {details.discovery.heading}
                         </h3>
                     </ScrollReveal>

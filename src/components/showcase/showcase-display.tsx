@@ -40,7 +40,6 @@ export const ShowcaseDisplay: React.FC<ShowcaseDisplayProps> = ({ activeProject 
                                         className="absolute top-0 left-0 w-[280px] md:w-[340px] aspect-[9/19] bg-black rounded-[3rem] border-8 border-gray-900 shadow-2xl overflow-hidden transition-transform duration-700 ease-out"
                                         style={{
                                             transform: 'translate(40%, 10%) rotate(12deg) scale(0.9)',
-                                            opacity: 0.6,
                                             zIndex: -1
                                         }}
                                     >
@@ -50,9 +49,8 @@ export const ShowcaseDisplay: React.FC<ShowcaseDisplayProps> = ({ activeProject 
                                         <img
                                             src={activeProject.secondaryImage}
                                             alt="Secondary Mockup"
-                                            className="w-full h-full object-cover opacity-80"
+                                            className="w-full h-full object-cover blur-[2px]"
                                         />
-                                        <div className="absolute inset-0 bg-black/30 pointer-events-none" />
                                     </div>
                                 )}
 

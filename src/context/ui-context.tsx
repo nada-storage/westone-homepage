@@ -7,6 +7,7 @@ interface UIContextType {
   isScrolled: boolean;
   setIsScrolled: (scrolled: boolean) => void;
   isDesktop: boolean;
+  isTouchDevice: boolean;
 
   // Hover State
   hoveredProjectId: string | null;
@@ -27,6 +28,9 @@ export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // UI State
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
+  const [isTouchDevice] = useState(() =>
+    window.matchMedia('(pointer: coarse)').matches
+  );
 
   // Hover State
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
@@ -62,6 +66,7 @@ export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     isScrolled,
     setIsScrolled,
     isDesktop,
+    isTouchDevice,
     hoveredProjectId,
     setHoveredProjectId,
     isHomePage,

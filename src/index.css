@@ -56,13 +56,29 @@
 /* Global Styles */
 body {
   margin: 0;
-  cursor: none;
   background-color: var(--color-meta-dark);
 }
 
-/* Hide cursor on all elements by default */
-* {
-  cursor: none !important;
+/* Hide cursor only on devices with fine pointer (mouse) - desktop */
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+
+  * {
+    cursor: none !important;
+  }
+}
+
+/* Touch devices and small screens without mouse show default cursor */
+@media (pointer: coarse) {
+  body {
+    cursor: auto;
+  }
+
+  * {
+    cursor: auto !important;
+  }
 }
 
 /* --- Showcase Animations --- */

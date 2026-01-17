@@ -101,6 +101,7 @@ export interface ProjectDetailContent {
     featureResult: string;
     visionToggle1?: string;
     visionToggle2?: string;
+    widgetImages?: string[];
   };
   hero: {
     title: string;
