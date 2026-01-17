@@ -43,7 +43,7 @@ const steps = [
 ];
 
 // Mobile Step Item with scroll-based reveal
-const MobileStepItem: React.FC<{ step: typeof steps[0]; index: number }> = ({ step, index }) => {
+const MobileStepItem: React.FC<{ step: typeof steps[0]; index: number }> = ({ step }) => {
     const ref = useRef<HTMLDivElement>(null);
     const isInView = useInView(ref, { once: false, amount: 0.5 });
 

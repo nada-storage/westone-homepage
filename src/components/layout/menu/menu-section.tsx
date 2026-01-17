@@ -99,7 +99,7 @@ const MobileNewsCard: React.FC<{ news: NewsItem; index: number }> = ({ news, ind
 );
 
 // Mobile Menu Layout
-const MobileMenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProjectHover, onOpenProject, onOpenContact, onOpenNews, onOpenWhatWeDo, onGoHome }) => {
+const MobileMenuSection: React.FC<MenuSectionProps> = ({ displayProject, onOpenContact, onOpenNews, onOpenWhatWeDo, onGoHome }) => {
     return (
         <motion.div
             className="absolute inset-0 z-20 flex flex-col pt-20 w-full h-full overflow-y-auto"
