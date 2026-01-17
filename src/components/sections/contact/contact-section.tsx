@@ -46,14 +46,32 @@ const ContactSection: React.FC = () => {
         }
     };
 
-    const handleSubmit = useCallback(async (e: React.FormEvent) => {
+    const getStageLabel = (value: string) => {
+        const stage = stages.find(s => s.value === value);
+        return stage ? stage.label : value;
+    };
+
+    const handleSubmit = useCallback((e: React.FormEvent) => {
         e.preventDefault();
         if (!validate()) return;
 
         setIsSubmitting(true);
 
-        // Simulate network request
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // Build email content
+        const subject = encodeURIComponent(`[문의] ${formData.name}님의 프로젝트 문의`);
+        const body = encodeURIComponent(
+`이름: ${formData.name}
+이메일: ${formData.email}
+어떻게 알게 되셨나요: ${formData.source || '미입력'}
+프로젝트 단계: ${getStageLabel(formData.stage)}
+뉴스레터 수신: ${formData.newsletter ? '동의' : '미동의'}
+
+메시지:
+${formData.message}`
+        );
+
+        // Open mailto link
+        window.location.href = `mailto:namespace.nada@gmail.com?subject=${subject}&body=${body}`;
 
         setIsSubmitting(false);
         setIsSuccess(true);
@@ -71,15 +89,15 @@ const ContactSection: React.FC = () => {
     }, [formData]);
 
     const stages = [
-        { value: 'idea', label: 'Just an Idea' },
-        { value: 'prototype', label: 'Prototype / MVP' },
-        { value: 'scaling', label: 'Scaling Up' },
-        { value: 'redesign', label: 'Redesign / Rewrite' },
+        { value: 'idea', label: '아이디어 단계' },
+        { value: 'prototype', label: '프로토타입 / MVP' },
+        { value: 'scaling', label: '스케일업 단계' },
+        { value: 'redesign', label: '리디자인 / 리빌드' },
     ];
 
     return (
         <motion.div
-            className="absolute inset-0 z-40 w-full min-h-screen bg-neutral-950 flex items-center justify-center p-6 md:p-12 lg:p-24 overflow-y-auto"
+            className="absolute inset-0 z-40 w-full min-h-screen bg-neutral-950 flex items-start lg:items-center justify-center p-6 md:p-12 lg:p-24 overflow-y-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -89,7 +107,7 @@ const ContactSection: React.FC = () => {
             {/* Background Decorative Elements */}
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white to-transparent opacity-20"></div>
 
-            <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 relative z-10 pt-20 lg:pt-0">
+            <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 relative z-10 pt-24 lg:pt-0">
 
                 {/* Left Column: Text Content */}
                 <div className="lg:col-span-5 flex flex-col justify-start pt-8">
@@ -209,7 +227,7 @@ const ContactSection: React.FC = () => {
                                     type="submit"
                                     disabled={isSubmitting || isSuccess}
                                     className={`
-                    relative px-10 py-4 rounded-full font-medium text-sm tracking-wide transition-all duration-300
+                    relative px-6 py-3 md:px-10 md:py-4 rounded-full font-medium text-sm tracking-wide transition-all duration-300
                     ${isSuccess
                                             ? 'bg-green-600 text-white cursor-default'
                                             : 'bg-white text-black hover:bg-neutral-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100'}
@@ -224,9 +242,9 @@ const ContactSection: React.FC = () => {
                                             Sending...
                                         </span>
                                     ) : isSuccess ? (
-                                        "Message Sent"
+                                        "Mail app opened"
                                     ) : (
-                                        "Submit Inquiry"
+                                        "Submit"
                                     )}
                                 </button>
 
@@ -234,7 +252,7 @@ const ContactSection: React.FC = () => {
 
                             {isSuccess && (
                                 <div className="mt-4 text-green-500 text-sm animate-pulse">
-                                    Thanks for reaching out! We'll be in touch within 24 hours.
+                                    메일 앱에서 전송 버튼을 눌러주세요. 24시간 내에 답변 드리겠습니다.
                                 </div>
                             )}
 

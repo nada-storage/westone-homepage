@@ -5,28 +5,27 @@ const CinematicFrame = () => {
         <section className="bg-gray-100 py-32 md:py-56 px-4 md:px-12">
             <div className="max-w-7xl mx-auto flex flex-col items-center">
 
-                {/* 
-            Frame Interaction Container 
-            - Effect: "Cinematic Slow Focus"
-            - Scale: 1.5 (Much Larger Start) -> 1.0
-            - Border: 150px (Very Thick) -> 20px (Standard)
-            - Duration: 3.5s (Very Slow) for a premium, heavy feel.
+                {/*
+            Frame Interaction Container
+            - Effect: "Cinematic Focus"
+            - Scale: 1.3 -> 1.0
+            - Border: 100px -> 20px
         */}
                 <motion.div
                     className="relative w-full max-w-4xl bg-black shadow-2xl"
                     style={{ borderStyle: 'solid', borderColor: 'black' }}
-                    initial={{ scale: 1.5, opacity: 0, borderWidth: "150px" }}
+                    initial={{ scale: 1.3, opacity: 0, borderWidth: "100px" }}
                     whileInView={{ scale: 1, opacity: 1, borderWidth: "20px" }}
                     viewport={{ once: true, margin: "-10%" }}
-                    transition={{ duration: 3.5, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                 >
                     {/* Inner White Matting & Content Area */}
                     <div className="bg-white w-full h-[600px] md:h-[800px] relative overflow-hidden p-4 md:p-8">
                         <motion.div
-                            initial={{ scale: 1.4 }}
+                            initial={{ scale: 1.2 }}
                             whileInView={{ scale: 1 }}
                             viewport={{ once: true }}
-                            transition={{ duration: 3.8, ease: "easeOut" }}
+                            transition={{ duration: 1.4, ease: "easeOut" }}
                             className="w-full h-full overflow-hidden"
                         >
                             <img
@@ -37,10 +36,10 @@ const CinematicFrame = () => {
                         </motion.div>
 
                         <motion.div
-                            initial={{ opacity: 0, y: 40 }}
+                            initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: 1.2, duration: 1.5 }}
+                            transition={{ delay: 0.4, duration: 0.6 }}
                             className="absolute bottom-16 left-0 right-0 text-center pointer-events-none"
                         >
                             <div className="bg-black/90 text-white p-8 max-w-lg mx-auto backdrop-blur-md">

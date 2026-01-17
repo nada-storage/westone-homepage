@@ -5,6 +5,7 @@ import { MENU_ITEMS } from '@/data/constants/menu';
 import { PROJECTS } from '@/data/projects';
 import { NEWS_ITEMS } from '@/data/constants/news';
 import { ArrowRightIcon } from '@/components/common/icons';
+import { useUI } from '@/context/ui-context';
 
 // Sub Components
 const MenuLink: React.FC<{ item: MenuItem, index: number, onOpenContact: () => void, onOpenNews: () => void, onOpenWhatWeDo: () => void }> = ({ item, index, onOpenContact, onOpenNews, onOpenWhatWeDo }) => {
@@ -64,9 +65,118 @@ interface MenuSectionProps {
     onOpenContact: () => void;
     onOpenNews: () => void;
     onOpenWhatWeDo: () => void;
+    onGoHome: () => void;
 }
 
-export const MenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProjectHover, onOpenProject, onOpenContact, onOpenNews, onOpenWhatWeDo }) => {
+// Mobile News Card for horizontal carousel
+const MobileNewsCard: React.FC<{ news: NewsItem; index: number }> = ({ news, index }) => (
+    <motion.div
+        className="flex-shrink-0 w-[200px] bg-white border border-gray-100 shadow-sm rounded-xl p-3 cursor-pointer"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.2 + (index * 0.05) }}
+        data-hover="true"
+    >
+        <div className="absolute top-3 right-3 text-gray-300">
+            <ArrowRightIcon />
+        </div>
+
+        {news.image && (
+            <div className="w-full h-20 rounded-lg overflow-hidden mb-3 bg-gray-100">
+                <img src={news.image} alt="" className="w-full h-full object-cover" />
+            </div>
+        )}
+
+        <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+                <span className="text-[9px] font-bold uppercase text-meta-purple/60">{news.category}</span>
+                <span className="text-[9px] text-gray-300">•</span>
+                <span className="text-[9px] text-gray-400">{news.date}</span>
+            </div>
+            <h4 className="text-xs font-serif font-medium leading-snug text-gray-900 line-clamp-2">{news.title}</h4>
+        </div>
+    </motion.div>
+);
+
+// Mobile Menu Layout
+const MobileMenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProjectHover, onOpenProject, onOpenContact, onOpenNews, onOpenWhatWeDo, onGoHome }) => {
+    return (
+        <motion.div
+            className="absolute inset-0 z-20 flex flex-col pt-20 w-full h-full overflow-y-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+        >
+            {/* Project Image - Top */}
+            <div className="px-4 mb-6">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={displayProject.id}
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="w-full aspect-[16/10] rounded-xl overflow-hidden shadow-lg relative"
+                    >
+                        <img src={displayProject.image} alt={displayProject.name} className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                        <div className="absolute bottom-4 left-4 text-white">
+                            <h3 className="font-serif text-2xl italic mb-1">{displayProject.name}</h3>
+                            <p className="text-xs opacity-80">{displayProject.description}</p>
+                            <div className="flex gap-2 mt-2">
+                                {displayProject.tags.map(tag => (
+                                    <span key={tag} className="px-2 py-0.5 rounded border border-white/30 text-[9px] uppercase tracking-wide bg-white/10">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </motion.div>
+                </AnimatePresence>
+            </div>
+
+            {/* Menu Links */}
+            <div className="px-6 mb-6">
+                <motion.a
+                    href="#case-studies"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        onGoHome();
+                    }}
+                    className="block py-1"
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.05 }}
+                >
+                    <span className="font-serif text-2xl text-gray-900 underline underline-offset-4">Case Studies</span>
+                </motion.a>
+                {MENU_ITEMS.map((item: MenuItem, index: number) => (
+                    <MenuLink key={item.label} item={item} index={index + 1} onOpenContact={onOpenContact} onOpenNews={onOpenNews} onOpenWhatWeDo={onOpenWhatWeDo} />
+                ))}
+            </div>
+
+            {/* Spacer to push news to bottom */}
+            <div className="flex-1 min-h-[60px]" />
+
+            {/* News Carousel - Bottom */}
+            <div className="pb-6">
+                <div className="flex justify-between items-center mb-3 px-6">
+                    <span className="text-[10px] uppercase tracking-widest text-gray-400 font-medium">Latest News</span>
+                    <span className="text-[10px] text-gray-400">Scroll →</span>
+                </div>
+                <div className="flex gap-3 overflow-x-auto no-scrollbar px-6 pb-2">
+                    {NEWS_ITEMS.map((news: NewsItem, i: number) => (
+                        <MobileNewsCard key={news.id} news={news} index={i} />
+                    ))}
+                </div>
+            </div>
+        </motion.div>
+    );
+};
+
+// Desktop Menu Layout
+const DesktopMenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProjectHover, onOpenProject, onOpenContact, onOpenNews, onOpenWhatWeDo }) => {
     return (
         <motion.div
             className="absolute inset-0 z-20 flex flex-col pt-24 pb-8 px-6 md:px-12 w-full h-full"
@@ -170,4 +280,14 @@ export const MenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProj
             </div>
         </motion.div>
     );
+};
+
+export const MenuSection: React.FC<MenuSectionProps> = (props) => {
+    const { isDesktop } = useUI();
+
+    if (!isDesktop) {
+        return <MobileMenuSection {...props} />;
+    }
+
+    return <DesktopMenuSection {...props} />;
 }

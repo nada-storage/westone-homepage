@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { useCursor } from "@/context/cursor-context";
+import { useRef } from 'react';
 
 const steps = [
     {
@@ -41,19 +42,85 @@ const steps = [
     }
 ];
 
+// Mobile Step Item with scroll-based reveal
+const MobileStepItem: React.FC<{ step: typeof steps[0]; index: number }> = ({ step, index }) => {
+    const ref = useRef<HTMLDivElement>(null);
+    const isInView = useInView(ref, { once: false, amount: 0.5 });
+
+    return (
+        <motion.div
+            ref={ref}
+            className="border-b border-gray-800 py-6"
+            initial={{ opacity: 0.5 }}
+            animate={{ opacity: isInView ? 1 : 0.5 }}
+            transition={{ duration: 0.3 }}
+        >
+            <div className="flex justify-between items-start mb-2">
+                <span className="text-sm text-gray-500 font-serif">{step.id}</span>
+            </div>
+            <h3 className="text-xl font-medium mb-3">{step.title}</h3>
+            <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{
+                    height: isInView ? 'auto' : 0,
+                    opacity: isInView ? 1 : 0
+                }}
+                transition={{ duration: 0.4, ease: 'easeOut' }}
+                className="overflow-hidden"
+            >
+                <p className="text-gray-400 text-sm leading-relaxed whitespace-pre-line pb-2">
+                    {step.desc}
+                </p>
+            </motion.div>
+        </motion.div>
+    );
+};
+
 const ProcessGrid = () => {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+    const [isMobile, setIsMobile] = useState(false);
     const { setCursorType } = useCursor();
 
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    // Mobile Layout
+    if (isMobile) {
+        return (
+            <section className="bg-black text-white pt-8 pb-16">
+                <div className="px-4 mb-12">
+                    <h2 className="text-3xl font-serif leading-tight">
+                        After shipping hundreds of products, there are a few key things we've learned
+                    </h2>
+                </div>
+
+                <div className="px-4 border-t border-gray-800">
+                    {steps.map((step, index) => (
+                        <MobileStepItem key={step.id} step={step} index={index} />
+                    ))}
+                </div>
+
+                <div className="px-4 mt-8">
+                    <a href="/" className="text-sm font-medium border-b border-white pb-1">View the work &rarr;</a>
+                </div>
+            </section>
+        );
+    }
+
+    // Desktop Layout
     return (
         <section className="bg-black text-white pt-8 pb-32 md:pt-12 md:pb-56">
             {/* Header Section */}
             <div className="max-w-7xl mx-auto px-4 md:px-12 mb-32 md:mb-40 flex flex-col md:flex-row md:items-end justify-between gap-8">
                 <h2 className="text-5xl md:text-7xl font-serif leading-tight max-w-5xl">
-                    After shipping hundreds of products, there are a few key things we’ve learned are needed to do the best work
+                    After shipping hundreds of products, there are a few key things we've learned are needed to do the best work
                 </h2>
                 <a
-                    href="#"
+                    href="/"
                     className="hidden md:inline-block text-sm font-medium border-b border-white pb-1 hover:text-gray-300 transition-colors whitespace-nowrap mb-2"
                     data-hover="true"
                 >
@@ -160,11 +227,6 @@ const ProcessGrid = () => {
                         </div>
                     </motion.div>
                 ))}
-            </div>
-
-            {/* Mobile Link (Visible only on small screens) */}
-            <div className="px-4 mt-8 md:hidden">
-                <a href="#" className="text-sm font-medium border-b border-white pb-1">View the work &rarr;</a>
             </div>
         </section>
     );

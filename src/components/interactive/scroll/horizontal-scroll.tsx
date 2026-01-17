@@ -23,22 +23,17 @@ interface ScrollItemProps {
 const ScrollItem: React.FC<ScrollItemProps> = ({ item, index, x, itemWidth, gap, totalCount }) => {
     const totalItemWidth = itemWidth + gap;
     const trackWidth = totalCount * totalItemWidth;
-    const baseOffset = index * totalItemWidth;
 
     const xPos = useTransform(x, (latestX) => {
-        // 1. Position relative to drag/scroll
-        let pos = baseOffset + latestX;
+        // Position: index 0 starts at center (0), others spread out from there
+        let pos = index * totalItemWidth + latestX;
 
-        // 2. Center the coordinate system around the "track"
-        pos -= (trackWidth / 2);
+        // Infinite wrap around
+        const halfTrack = trackWidth / 2;
+        pos = ((pos % trackWidth) + trackWidth) % trackWidth;
+        if (pos > halfTrack) pos -= trackWidth;
 
-        // 3. Infinite Wrap
-        const min = -trackWidth / 2;
-        const max = trackWidth / 2;
-        const range = max - min;
-
-        const wrappedPos = ((((pos - min) % range) + range) % range) + min;
-        return wrappedPos;
+        return pos;
     });
 
     return (
@@ -46,8 +41,7 @@ const ScrollItem: React.FC<ScrollItemProps> = ({ item, index, x, itemWidth, gap,
             style={{
                 x: xPos,
                 width: itemWidth,
-                // Since the parent is left: 50%, we need to offset by half width to center items initially
-                left: `-${itemWidth / 2}px`
+                left: `calc(50% - ${itemWidth / 2}px)`
             }}
             className="absolute top-0 h-full flex-shrink-0 bg-gray-900 overflow-hidden group rounded-sm select-none"
         >
@@ -71,10 +65,10 @@ const HorizontalScroll = () => {
     // Responsive width calculation
     useEffect(() => {
         const updateDimensions = () => {
-            // Dimensions matching the previous design: 60vw mobile, 25vw desktop
+            // Mobile: 75vw for centered card with peek on sides, Desktop: 25vw
             const isMobile = window.innerWidth < 768;
-            const itemWidth = isMobile ? window.innerWidth * 0.6 : window.innerWidth * 0.25;
-            const gap = isMobile ? 16 : 32;
+            const itemWidth = isMobile ? window.innerWidth * 0.75 : window.innerWidth * 0.25;
+            const gap = isMobile ? 12 : 32;
             setDimensions({ width: itemWidth, gap });
         };
 

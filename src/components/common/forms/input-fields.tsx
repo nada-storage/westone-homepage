@@ -45,7 +45,7 @@ export const SelectInput: React.FC<SelectProps> = ({ label, options, error, clas
                     {...props}
                     className={`${baseInputStyles} appearance-none cursor-pointer ${error ? 'border-red-500' : ''}`}
                 >
-                    <option value="" disabled className="bg-neutral-900 text-neutral-500">Select One</option>
+                    <option value="" disabled className="bg-neutral-900 text-neutral-500">선택해주세요</option>
                     {options.map((opt) => (
                         <option key={opt.value} value={opt.value} className="bg-neutral-900 text-white">
                             {opt.label}

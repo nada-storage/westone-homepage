@@ -97,9 +97,76 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
             </section>
 
             {/* The Vision - Grid Layout */}
-            <section className="py-24 px-6 md:px-12 max-w-[1400px] mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-24 items-start">
-                    <div className="md:col-span-4 sticky top-32">
+            <section className="py-24 px-6 md:px-12 max-w-[1400px] mx-auto relative">
+                {/* Mobile Layout: Image -> Text -> Grid */}
+                <div className="md:hidden">
+                    {/* Main Image (no overlap) */}
+                    <ScrollReveal>
+                        <div className="relative aspect-[9/16] bg-neutral-900 rounded-lg overflow-hidden group mb-8">
+                            <img
+                                src={isPlayingVision ? (details.media.visionToggle2 || details.media.visionGrid2) : (details.media.visionToggle1 || details.media.visionGrid1)}
+                                alt="Interface"
+                                className={`object-cover w-full h-full transition-all duration-1000 group-hover:scale-105 ${isPlayingVision ? 'opacity-100 object-bottom' : 'opacity-80 object-center'}`}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                            <div className="absolute bottom-8 left-4 right-4">
+                                <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl flex items-center justify-between">
+                                    <div>
+                                        <div className="text-sm text-gray-300 mb-1">{details.vision.image1Subtitle}</div>
+                                        <div className="text-lg font-serif">{details.vision.image1Title}</div>
+                                    </div>
+                                    <button
+                                        onClick={handleVisionPlay}
+                                        className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-black hover:scale-110 transition-transform active:scale-95"
+                                    >
+                                        {isPlayingVision ? (
+                                            <Pause className="fill-black ml-0 w-5 h-5" />
+                                        ) : (
+                                            <Play className="fill-black ml-1 w-5 h-5" />
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </ScrollReveal>
+
+                    {/* Text Section (sticky, overlaps grid below) */}
+                    <div className="sticky top-24 z-20 -mx-6">
+                        <ScrollReveal>
+                            <div className="bg-black/90 backdrop-blur-md p-6 rounded-lg mx-2">
+                                <span className="block text-sm font-semibold uppercase tracking-wider mb-4 text-gray-400">The Vision</span>
+                                <h3 className="text-2xl font-serif mb-6 leading-tight whitespace-pre-line">
+                                    {details.vision.heading}
+                                </h3>
+                                <p className="text-gray-400 text-sm leading-relaxed">
+                                    {details.vision.text}
+                                </p>
+                            </div>
+                        </ScrollReveal>
+                    </div>
+
+                    {/* Grid Images (scrolls under text) */}
+                    <div className="flex flex-col gap-8 mt-8 relative z-10">
+                        <ScrollReveal delay={100}>
+                            <div className="aspect-square bg-neutral-800 rounded-lg overflow-hidden relative group">
+                                <img src={details.media.visionGrid1} className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" alt="Detail 1" />
+                                <div className="absolute inset-0 bg-purple-900/40 mix-blend-overlay group-hover:bg-transparent transition-colors duration-500"></div>
+                            </div>
+                        </ScrollReveal>
+                        <ScrollReveal delay={200}>
+                            <div className="aspect-square bg-neutral-800 rounded-lg overflow-hidden relative group">
+                                <img src={details.media.visionGrid2} className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" alt="Detail 2" />
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <span className="font-serif italic text-xl">{details.vision.image3HoverText}</span>
+                                </div>
+                            </div>
+                        </ScrollReveal>
+                    </div>
+                </div>
+
+                {/* Desktop Layout: Original side-by-side */}
+                <div className="hidden md:grid md:grid-cols-12 gap-12 md:gap-24 items-start">
+                    <div className="md:col-span-4 sticky top-32 z-20">
                         <ScrollReveal>
                             <span className="block text-sm font-semibold uppercase tracking-wider mb-6 text-gray-400">The Vision</span>
                             <h3 className="text-3xl md:text-4xl font-serif mb-8 leading-tight whitespace-pre-line">
@@ -111,9 +178,9 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                         </ScrollReveal>
                     </div>
 
-                    <div className="md:col-span-8 space-y-8">
+                    <div className="md:col-span-8 space-y-8 relative z-10">
                         <ScrollReveal>
-                            <div className="relative aspect-[9/16] md:aspect-[16/10] bg-neutral-900 rounded-lg overflow-hidden group">
+                            <div className="relative aspect-[16/10] bg-neutral-900 rounded-lg overflow-hidden group">
                                 <img
                                     src={isPlayingVision ? (details.media.visionToggle2 || details.media.visionGrid2) : (details.media.visionToggle1 || details.media.visionGrid1)}
                                     alt="Interface"
@@ -141,7 +208,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                             </div>
                         </ScrollReveal>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="grid grid-cols-2 gap-8">
                             <ScrollReveal delay={100}>
                                 <div className="aspect-square bg-neutral-800 rounded-lg overflow-hidden relative group">
                                     <img src={details.media.visionGrid1} className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" alt="Detail 1" />
@@ -183,8 +250,99 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                         </div>
                     </ScrollReveal>
 
-                    {/* Bento Grid Layout */}
-                    <div className="grid grid-cols-1 md:grid-cols-5 gap-6 h-auto md:h-[800px]">
+                    {/* Bento Grid Layout - Mobile */}
+                    <div className="md:hidden flex flex-col gap-6">
+                        {/* Main Image with A,B,C buttons */}
+                        <ScrollReveal>
+                            <div className="w-full aspect-[4/3] bg-[#111] rounded-lg p-0 flex flex-col justify-between border border-white/5 relative overflow-hidden group">
+                                {/* Grid Background Images */}
+                                <div className="absolute inset-0 grid grid-cols-3">
+                                    {widgetImages.slice(0, 3).map((img, i) => (
+                                        <div key={i} className="relative w-full h-full overflow-hidden border-r border-white/10 last:border-r-0">
+                                            <img
+                                                src={img}
+                                                alt={`Option ${i}`}
+                                                className={`w-full h-full object-cover transition-all duration-500 ${activeHighlightIndex === i
+                                                    ? 'grayscale-0 brightness-100 scale-105'
+                                                    : 'grayscale brightness-50 scale-100'
+                                                    }`}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Wrapper for Buttons (positioned top-left) */}
+                                <div className="relative z-10 flex flex-wrap gap-2 p-6">
+                                    {(['A', 'B', 'C'] as const).map((label, i) => (
+                                        <button
+                                            key={label}
+                                            onClick={() => setActiveHighlightIndex(i)}
+                                            className={`w-10 h-10 rounded-full border border-white/20 text-sm font-bold transition-all duration-300 flex items-center justify-center ${activeHighlightIndex === i
+                                                ? 'bg-white text-black scale-110 shadow-lg'
+                                                : 'bg-black/40 text-gray-300 hover:bg-white/20 backdrop-blur-sm'
+                                                }`}
+                                        >
+                                            {label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </ScrollReveal>
+
+                        {/* Card with text */}
+                        <ScrollReveal delay={100}>
+                            <div className="w-full aspect-[16/9] rounded-lg relative overflow-hidden group flex bg-black">
+                                {/* Left Half - Top Image */}
+                                <div className="w-1/2 h-full relative overflow-hidden">
+                                    <div
+                                        className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105"
+                                        style={{
+                                            backgroundImage: `url(${details.media.auraCard})`,
+                                            backgroundSize: '100% 200%',
+                                            backgroundPosition: 'center top',
+                                            backgroundRepeat: 'no-repeat'
+                                        }}
+                                    />
+                                    <div className="absolute inset-0 bg-black/20"></div>
+                                </div>
+
+                                {/* Right Half - Bottom Image */}
+                                <div className="w-1/2 h-full relative overflow-hidden">
+                                    <div
+                                        className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105"
+                                        style={{
+                                            backgroundImage: `url(${details.media.auraCard})`,
+                                            backgroundSize: '100% 200%',
+                                            backgroundPosition: 'center bottom',
+                                            backgroundRepeat: 'no-repeat'
+                                        }}
+                                    />
+                                    <div className="absolute inset-0 bg-black/20"></div>
+                                </div>
+
+                                {/* Color Overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/80 to-purple-900/40 mix-blend-hard-light pointer-events-none"></div>
+
+                                {/* Text Overlay */}
+                                <div className="absolute inset-0 z-10 flex items-center justify-center text-center">
+                                    <h5 className="font-serif text-2xl italic leading-tight text-white drop-shadow-xl" dangerouslySetInnerHTML={{ __html: details.aura.card2Text }}></h5>
+                                </div>
+                            </div>
+                        </ScrollReveal>
+
+                        {/* Bento Image */}
+                        <ScrollReveal delay={200}>
+                            <div className="w-full aspect-[4/3] bg-gray-100 rounded-lg overflow-hidden relative group">
+                                <img src={details.media.auraBento} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" alt="Moodboard" />
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <h4 className="font-serif text-5xl text-black/10 group-hover:text-black/30 transition-colors duration-500">{details.aura.bigText}</h4>
+                                </div>
+                            </div>
+                        </ScrollReveal>
+                    </div>
+
+                    {/* Bento Grid Layout - Desktop */}
+                    <div className="hidden md:grid md:grid-cols-5 gap-6 h-auto md:h-[800px]">
                         <ScrollReveal className="h-full md:col-span-2">
                             <div className="w-full h-full min-h-[400px] bg-gray-100 rounded-lg overflow-hidden relative group">
                                 <img src={details.media.auraBento} className="w-full h-full object-contain group-hover:scale-105 transition-all duration-700" alt="Moodboard" />
