@@ -5,7 +5,7 @@ export { roProject, roDetails } from './ro';
 export { atomsProject, atomsDetails } from './atoms';
 export { upworkProject, upworkDetails } from './upwork';
 export { atlanticProject, atlanticDetails } from './atlantic';
-export { sunoProject, sunoDetails } from './suno';
+export { AIToDoProject, AIToDoDetails } from './suno';
 export { uberProject, uberDetails } from './uber';
 export { calvinKleinProject, calvinKleinDetails } from './calvin-klein';
 export { pitchProject, pitchDetails } from './pitch';
@@ -16,7 +16,7 @@ import { roProject, roDetails } from './ro';
 import { atomsProject, atomsDetails } from './atoms';
 import { upworkProject, upworkDetails } from './upwork';
 import { atlanticProject, atlanticDetails } from './atlantic';
-import { sunoProject, sunoDetails } from './suno';
+import { AIToDoProject, AIToDoDetails } from './suno';
 import { uberProject, uberDetails } from './uber';
 import { calvinKleinProject, calvinKleinDetails } from './calvin-klein';
 import { pitchProject, pitchDetails } from './pitch';
@@ -24,11 +24,11 @@ import { headspaceProject, headspaceDetails } from './headspace';
 
 // Aggregated exports
 export const PROJECTS: Project[] = [
+    AIToDoProject,
     roProject,
     atomsProject,
     upworkProject,
     atlanticProject,
-    sunoProject,
     uberProject,
     calvinKleinProject,
     pitchProject,
@@ -40,7 +40,7 @@ export const PROJECT_DETAILS: Record<string, ProjectDetailContent> = {
     '2': atomsDetails,
     '3': upworkDetails,
     '4': atlanticDetails,
-    '5': sunoDetails,
+    '5': AIToDoDetails,
     '6': uberDetails,
     '7': calvinKleinDetails,
     '8': pitchDetails,
