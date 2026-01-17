@@ -1,7 +1,7 @@
 import type { Project, ProjectDetailContent } from '../../types';
 
 // Individual project imports
-export { roProject, roDetails } from './ro';
+export { ballpangProject, ballpangDetails } from './ro';
 export { atomsProject, atomsDetails } from './atoms';
 export { upworkProject, upworkDetails } from './upwork';
 export { atlanticProject, atlanticDetails } from './atlantic';
@@ -12,7 +12,7 @@ export { pitchProject, pitchDetails } from './pitch';
 export { headspaceProject, headspaceDetails } from './headspace';
 
 // Re-import for aggregation
-import { roProject, roDetails } from './ro';
+import { ballpangProject, ballpangDetails } from './ro';
 import { atomsProject, atomsDetails } from './atoms';
 import { upworkProject, upworkDetails } from './upwork';
 import { atlanticProject, atlanticDetails } from './atlantic';
@@ -25,7 +25,7 @@ import { headspaceProject, headspaceDetails } from './headspace';
 // Aggregated exports
 export const PROJECTS: Project[] = [
     AIToDoProject,
-    roProject,
+    ballpangProject,
     atomsProject,
     upworkProject,
     atlanticProject,
@@ -36,7 +36,7 @@ export const PROJECTS: Project[] = [
 ];
 
 export const PROJECT_DETAILS: Record<string, ProjectDetailContent> = {
-    '1': roDetails,
+    'ballpang': ballpangDetails,
     '2': atomsDetails,
     '3': upworkDetails,
     '4': atlanticDetails,
