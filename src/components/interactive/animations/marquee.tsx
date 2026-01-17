@@ -35,7 +35,7 @@ const Marquee: React.FC<MarqueeProps> = ({ items, text }) => {
                     transition={{
                         repeat: Infinity,
                         ease: "linear",
-                        duration: 40,
+                        duration: 120,
                     }}
                 >
                     {/* Repeat list multiple times to ensure seamless loop on large screens */}

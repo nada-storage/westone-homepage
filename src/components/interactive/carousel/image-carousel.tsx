@@ -28,7 +28,7 @@ export const ImageCarousel: React.FC<{ items: CarouselItem[] }> = ({ items }) =>
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
                         <div className="absolute bottom-8 left-8">
                             <h4 className="text-2xl font-serif mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 text-white">{item.title}</h4>
-                            <p className="text-sm text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">Listen now →</p>
+
                         </div>
                     </div>
                 ))}

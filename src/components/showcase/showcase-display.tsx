@@ -89,7 +89,9 @@ export const ShowcaseDisplay: React.FC<ShowcaseDisplayProps> = ({ activeProject 
 
                 {/* --- DESCRIPTION & TAGS --- */}
                 <div className={`z-10 ${config.descriptionStyles} ${getAnimClass(config.enterAnimation, 'desc')}`}>
-                    <p className={`text-lg md:text-xl font-light leading-relaxed mb-4 ${subTextColor}`}>
+                    <p
+                        className={`text-lg md:text-xl font-light leading-relaxed mb-4 ${subTextColor} whitespace-pre-line`}
+                    >
                         {activeProject.description}
                     </p>
                     <div className={`flex flex-wrap gap-2 ${config.descriptionStyles.includes('text-right') ? 'justify-end' : config.descriptionStyles.includes('text-center') ? 'justify-center' : 'justify-start'}`}>

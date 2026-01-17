@@ -78,7 +78,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
             <section className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
                 <ScrollReveal>
                     <span className="block text-sm font-semibold uppercase tracking-wider mb-8 text-purple-400">Introduction</span>
-                    <h2 className="text-3xl md:text-5xl lg:text-7xl font-serif leading-[1.1] md:leading-[1.1] max-w-5xl text-white/90">
+                    <h2 className="text-3xl md:text-5xl lg:text-7xl font-serif leading-[1.1] md:leading-[1.1] max-w-5xl text-white/90 whitespace-pre-line">
                         {details.intro.text}
                     </h2>
                 </ScrollReveal>
