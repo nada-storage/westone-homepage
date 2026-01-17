@@ -1,22 +1,22 @@
 import type { Project, ProjectDetailContent } from '../../types';
 
 // Individual project imports
-export { ballpangProject, ballpangDetails } from './ro';
-export { atomsProject, atomsDetails } from './atoms';
+export { ballpangProject, ballpangDetails } from './ballpang';
+export { recyclerProject, recyclerDetails } from './recycler';
 export { upworkProject, upworkDetails } from './upwork';
 export { atlanticProject, atlanticDetails } from './atlantic';
-export { AIToDoProject, AIToDoDetails } from './suno';
+export { AIToDoProject, AIToDoDetails } from './ai-todo';
 export { uberProject, uberDetails } from './uber';
 export { calvinKleinProject, calvinKleinDetails } from './calvin-klein';
 export { pitchProject, pitchDetails } from './pitch';
 export { headspaceProject, headspaceDetails } from './headspace';
 
 // Re-import for aggregation
-import { ballpangProject, ballpangDetails } from './ro';
-import { atomsProject, atomsDetails } from './atoms';
+import { ballpangProject, ballpangDetails } from './ballpang';
+import { recyclerProject, recyclerDetails } from './recycler';
 import { upworkProject, upworkDetails } from './upwork';
 import { atlanticProject, atlanticDetails } from './atlantic';
-import { AIToDoProject, AIToDoDetails } from './suno';
+import { AIToDoProject, AIToDoDetails } from './ai-todo';
 import { uberProject, uberDetails } from './uber';
 import { calvinKleinProject, calvinKleinDetails } from './calvin-klein';
 import { pitchProject, pitchDetails } from './pitch';
@@ -26,7 +26,7 @@ import { headspaceProject, headspaceDetails } from './headspace';
 export const PROJECTS: Project[] = [
     AIToDoProject,
     ballpangProject,
-    atomsProject,
+    recyclerProject,
     upworkProject,
     atlanticProject,
     uberProject,
@@ -37,7 +37,7 @@ export const PROJECTS: Project[] = [
 
 export const PROJECT_DETAILS: Record<string, ProjectDetailContent> = {
     'ballpang': ballpangDetails,
-    '2': atomsDetails,
+    'recycler': recyclerDetails,
     '3': upworkDetails,
     '4': atlanticDetails,
     '5': AIToDoDetails,
