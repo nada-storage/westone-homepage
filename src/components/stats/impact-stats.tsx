@@ -16,7 +16,10 @@ const ImpactStats = () => {
             <div className="w-full mx-auto mb-32">
                 <h2 className="serif text-5xl md:text-8xl leading-none mb-24">
                     우리의 가치는 <br />
-                    <span className="text-gray-500 italic">실제 결과로 증명합니다</span>
+                    <span className="text-gray-500 italic">
+                        <span className="hidden md:inline">실제 결과로 증명합니다</span>
+                        <span className="md:hidden">실제 결과로<br />증명합니다</span>
+                    </span>
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 border-t border-gray-800 pt-12">
@@ -47,7 +50,7 @@ const ImpactStats = () => {
                 <p className="max-w-md leading-relaxed">
                     After shipping hundreds of products, there are a few key things we've learned are needed to do the best work.
                 </p>
-                <a href="#" className="hover:text-white transition-colors underline decoration-1 underline-offset-4" data-hover="true">
+                <a href="/" className="hover:text-white transition-colors underline decoration-1 underline-offset-4" data-hover="true">
                     View the work →
                 </a>
             </div>

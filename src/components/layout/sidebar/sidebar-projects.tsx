@@ -53,7 +53,7 @@ export const SidebarProjects: React.FC<SidebarProjectsProps> = ({ onHoverProject
                 animate={{ opacity: 0.5 }}
                 className={`text-[10px] uppercase tracking-widest mb-4 ml-1 transition-colors text-white/50`}
             >
-                Selected Work
+                Case Study
             </motion.span>
 
             {PROJECTS.map((project: Project, index: number) => (

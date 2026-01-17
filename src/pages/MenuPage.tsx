@@ -12,6 +12,7 @@ export const MenuPage: React.FC = () => {
     goToContact,
     goToNews,
     goToWhatWeDo,
+    goToHome,
   } = useProjectNavigation();
 
   const handleOpenProject = (id: string, e?: React.MouseEvent) => {
@@ -29,6 +30,7 @@ export const MenuPage: React.FC = () => {
       onOpenContact={goToContact}
       onOpenNews={goToNews}
       onOpenWhatWeDo={goToWhatWeDo}
+      onGoHome={goToHome}
     />
   );
 };

@@ -52,7 +52,7 @@ const AppContent: React.FC = () => {
   return (
     <div className={`relative w-full ${isFullScreenPage ? 'h-screen overflow-hidden' : 'min-h-screen'} font-sans transition-colors duration-700 ${isMenuPage ? 'text-black' : 'text-white'}`}>
 
-      <CustomCursor />
+      {isDesktop && <CustomCursor />}
 
       {/* Z-Layer 0: Background - Fixed */}
       <div className={`${isFullScreenPage ? 'fixed' : 'absolute'} inset-0 z-0 bg-black`}>

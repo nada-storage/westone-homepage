@@ -18,8 +18,13 @@ const HeroVideo = () => {
                     transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
                     className="serif text-5xl md:text-7xl lg:text-8xl leading-[1.2] tracking-tight text-center md:text-left"
                 >
-                    기술과 디자인, 두 언어로 <br />
-                    <span className="text-gray-500 italic block mt-2 md:mt-0">완성도 높은 제품을 만듭니다</span>
+                    <span className="hidden md:inline">기술과 디자인, 두 언어로</span>
+                    <span className="md:hidden">기술과 디자인,<br />두 언어로</span>
+                    <br />
+                    <span className="text-gray-500 italic block mt-2 md:mt-0">
+                        <span className="hidden md:inline">완성도 높은 제품을 만듭니다</span>
+                        <span className="md:hidden">완성도 높은 제품을<br />만듭니다</span>
+                    </span>
                 </motion.h1>
             </div>
 

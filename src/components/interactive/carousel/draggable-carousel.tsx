@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, MotionValue, animate, type PanInfo } from 'framer-motion';
 import { useCursor } from '../../../context/cursor-context';
 
@@ -53,9 +53,17 @@ const DISPLAY_ITEMS: Testimonial[] = Array(RENDER_SETS).fill(ITEMS).flat();
 const DraggableCarousel = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const { setCursorType } = useCursor();
+    const [isMobile, setIsMobile] = useState(false);
 
     // Use a motion value to track the drag position globally
     const x = useMotionValue(0);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     // Handle Pan Gesture (Drag without moving the element)
     const onPan = (_e: any, info: PanInfo) => {
@@ -84,13 +92,31 @@ const DraggableCarousel = () => {
         });
     };
 
+    // Mobile: Zigzag vertical layout
+    if (isMobile) {
+        return (
+            <section className="bg-black pt-16 pb-8 overflow-hidden relative">
+                <div className="mb-8 px-4 relative z-10">
+                    <h2 className="serif text-4xl text-white mb-6">Meet the Team</h2>
+                </div>
+
+                <div className="px-4 space-y-6">
+                    {testimonials.map((item, index) => (
+                        <MobileTeamCard key={item.id} item={item} index={index} />
+                    ))}
+                </div>
+            </section>
+        );
+    }
+
+    // Desktop: Draggable carousel
     return (
         <section className="bg-black pt-24 pb-8 md:pt-40 md:pb-12 overflow-hidden relative select-none">
             <div className="mb-12 px-4 md:px-12 relative z-10 pointer-events-none">
                 <h2 className="serif text-5xl md:text-7xl text-white mb-6">Meet the Team</h2>
             </div>
 
-            {/* 
+            {/*
          The Container acts as the interactive surface.
          We use onPan instead of drag. This means the div itself stays fixed (inset-0),
          but we capture the movement delta to drive the animation.
@@ -125,6 +151,46 @@ const DraggableCarousel = () => {
                 </div>
             </div>
         </section>
+    );
+};
+
+// Mobile Zigzag Card Component
+interface MobileTeamCardProps {
+    item: Testimonial;
+    index: number;
+}
+
+const MobileTeamCard: React.FC<MobileTeamCardProps> = ({ item, index }) => {
+    const isEven = index % 2 === 0;
+
+    return (
+        <motion.div
+            className={`flex flex-col ${isEven ? 'items-start pr-12' : 'items-end pl-12'}`}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, delay: index * 0.1 }}
+        >
+            <div className="w-[65vw] max-w-[280px]">
+                <div className="w-full aspect-square overflow-hidden rounded-sm bg-gray-900 shadow-xl mb-4">
+                    <img
+                        src={item.image}
+                        alt={item.author}
+                        className="w-full h-full object-cover grayscale opacity-90"
+                        draggable={false}
+                    />
+                </div>
+                <div className="space-y-3">
+                    <p className="text-sm text-white font-serif leading-relaxed whitespace-pre-line">
+                        "{item.quote}"
+                    </p>
+                    <div>
+                        <p className="text-white font-medium text-sm">{item.author}</p>
+                        <p className="text-gray-500 text-xs uppercase tracking-wide mt-1">{item.role}</p>
+                    </div>
+                </div>
+            </div>
+        </motion.div>
     );
 };
 
