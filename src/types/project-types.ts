@@ -78,6 +78,7 @@ export interface Project {
   // Showcase Fields
   bgImage?: string;
   foregroundImage?: string;
+  secondaryImage?: string;
   foregroundType?: 'mobile' | 'desktop' | 'image' | 'none';
   theme?: 'light' | 'dark';
   accentColor?: string;
@@ -90,7 +91,7 @@ export interface Project {
 export interface ProjectDetailContent {
   id: string;
   media: {
-    hero: string;
+    hero: string | string[];
     visionMain: string;
     visionGrid1: string;
     visionGrid2: string;
@@ -98,6 +99,8 @@ export interface ProjectDetailContent {
     auraCard: string;
     featureInit: string;
     featureResult: string;
+    visionToggle1?: string;
+    visionToggle2?: string;
   };
   hero: {
     title: string;

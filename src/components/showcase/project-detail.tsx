@@ -15,8 +15,8 @@ interface ProjectDetailProps {
 }
 
 export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProject, onNextProject }) => {
-    // State for Genre Interaction (Kept as is for structure/demo retention)
-    const [activeGenre, setActiveGenre] = useState<'Jazz' | 'Lo-Fi' | 'Synth'>('Lo-Fi');
+    // State for Interaction (Updated)
+    const [activeHighlightIndex, setActiveHighlightIndex] = useState(1);
 
     // State for Song Creation Interaction (Kept as is)
     const [isGenerating, setIsGenerating] = useState(false);
@@ -31,22 +31,16 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
         }, 2000);
     };
 
-    const genreConfig = {
-        'Jazz': {
-            img: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=2070&auto=format&fit=crop', // Jazz Club
-            gradient: 'from-indigo-900/80',
-            progressColor: 'bg-indigo-500'
-        },
-        'Lo-Fi': {
-            img: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?q=80&w=2070&auto=format&fit=crop', // Cozy Indoor
-            gradient: 'from-orange-900/80',
-            progressColor: 'bg-orange-500'
-        },
-        'Synth': {
-            img: 'https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=2070&auto=format&fit=crop', // Neon Synth
-            gradient: 'from-fuchsia-900/80',
-            progressColor: 'bg-fuchsia-500'
-        }
+    // Helper to ensure we have an array of images for the widget
+    const widgetImages = Array.isArray(details.media.hero)
+        ? details.media.hero
+        : [details.media.hero, details.media.hero, details.media.hero]; // Fallback for single image projects
+
+    // Vision Play Interaction
+    const [isPlayingVision, setIsPlayingVision] = useState(false);
+
+    const handleVisionPlay = () => {
+        setIsPlayingVision(!isPlayingVision);
     };
 
     return (
@@ -66,12 +60,30 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                 deliverables={details.hero.deliverables}
             />
 
-            <div className="relative w-full h-[60vh] md:h-[80vh] overflow-hidden">
-                <img
-                    src={details.media.hero}
-                    alt="Hero"
-                    className="w-full h-full object-cover"
-                />
+            <div className="relative w-full h-[60vh] md:h-[80vh] overflow-hidden bg-neutral-900">
+                {Array.isArray(details.media.hero) ? (
+                    <div className="w-full h-full grid grid-cols-3">
+                        {details.media.hero.map((imgSrc, index) => (
+                            <div key={index} className="w-full h-full relative overflow-hidden group">
+                                <img
+                                    src={imgSrc}
+                                    alt={`Hero ${index + 1}`}
+                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                />
+                                {/* Divider line */}
+                                {index < (details.media.hero as string[]).length - 1 && (
+                                    <div className="absolute top-0 right-0 w-px h-full bg-white/10 z-10"></div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <img
+                        src={details.media.hero}
+                        alt="Hero"
+                        className="w-full h-full object-cover"
+                    />
+                )}
             </div>
 
             {/* Introduction */}
@@ -90,7 +102,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                     <div className="md:col-span-4 sticky top-32">
                         <ScrollReveal>
                             <span className="block text-sm font-semibold uppercase tracking-wider mb-6 text-gray-400">The Vision</span>
-                            <h3 className="text-3xl md:text-4xl font-serif mb-8 leading-tight">
+                            <h3 className="text-3xl md:text-4xl font-serif mb-8 leading-tight whitespace-pre-line">
                                 {details.vision.heading}
                             </h3>
                             <p className="text-gray-400 text-sm leading-relaxed mb-8">
@@ -103,9 +115,9 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                         <ScrollReveal>
                             <div className="relative aspect-[9/16] md:aspect-[16/10] bg-neutral-900 rounded-lg overflow-hidden group">
                                 <img
-                                    src={details.media.visionMain}
+                                    src={isPlayingVision ? (details.media.visionToggle2 || details.media.visionGrid2) : (details.media.visionToggle1 || details.media.visionGrid1)}
                                     alt="Interface"
-                                    className="object-cover w-full h-full transition-transform duration-1000 group-hover:scale-105 opacity-80"
+                                    className={`object-cover w-full h-full transition-all duration-1000 group-hover:scale-105 ${isPlayingVision ? 'opacity-100 object-bottom' : 'opacity-80 object-center'}`}
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                                 <div className="absolute bottom-8 left-8 right-8">
@@ -114,9 +126,16 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                                             <div className="text-sm text-gray-300 mb-1">{details.vision.image1Subtitle}</div>
                                             <div className="text-xl font-serif">{details.vision.image1Title}</div>
                                         </div>
-                                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-black">
-                                            <Play className="fill-black ml-1 w-5 h-5" />
-                                        </div>
+                                        <button
+                                            onClick={handleVisionPlay}
+                                            className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-black hover:scale-110 transition-transform active:scale-95"
+                                        >
+                                            {isPlayingVision ? (
+                                                <Pause className="fill-black ml-0 w-5 h-5" />
+                                            ) : (
+                                                <Play className="fill-black ml-1 w-5 h-5" />
+                                            )}
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -165,63 +184,90 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                     </ScrollReveal>
 
                     {/* Bento Grid Layout */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-auto md:h-[800px]">
-                        <ScrollReveal className="h-full">
-                            <div className="w-full h-full min-h-[400px] bg-neutral-800 rounded-lg overflow-hidden relative group">
-                                <img src={details.media.auraBento} className="w-full h-full object-cover opacity-60 mix-blend-luminosity group-hover:mix-blend-normal group-hover:scale-105 transition-all duration-700" alt="Moodboard" />
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-6 h-auto md:h-[800px]">
+                        <ScrollReveal className="h-full md:col-span-2">
+                            <div className="w-full h-full min-h-[400px] bg-gray-100 rounded-lg overflow-hidden relative group">
+                                <img src={details.media.auraBento} className="w-full h-full object-contain group-hover:scale-105 transition-all duration-700" alt="Moodboard" />
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <h4 className="font-serif text-8xl text-white/10 group-hover:text-white/30 transition-colors duration-500">{details.aura.bigText}</h4>
+                                    <h4 className="font-serif text-8xl text-black/10 group-hover:text-black/30 transition-colors duration-500">{details.aura.bigText}</h4>
                                 </div>
                             </div>
                         </ScrollReveal>
 
-                        <div className="flex flex-col gap-6 h-full">
+                        <div className="flex flex-col gap-6 h-full md:col-span-3">
                             <ScrollReveal delay={100} className="flex-1">
-                                {/* Interactive Genre Widget (Preserved) */}
-                                <div className="w-full h-full bg-[#111] rounded-lg p-8 flex flex-col justify-between border border-white/5 hover:border-white/20 transition-colors relative overflow-hidden group">
-                                    {/* Dynamic Background Image */}
-                                    <img
-                                        key={activeGenre}
-                                        src={genreConfig[activeGenre].img}
-                                        alt={activeGenre}
-                                        className="absolute inset-0 w-full h-full object-cover opacity-30 transition-opacity duration-500 ease-in-out group-hover:opacity-40 animate-in fade-in zoom-in-105 duration-700"
-                                    />
-                                    {/* Dynamic Gradient Overlay */}
-                                    <div className={`absolute inset-0 bg-gradient-to-br ${genreConfig[activeGenre].gradient} to-black/90 transition-all duration-500`}></div>
-
-                                    <div className="relative z-10 flex flex-wrap gap-2">
-                                        {(['Jazz', 'Lo-Fi', 'Synth'] as const).map((genre) => (
-                                            <button
-                                                key={genre}
-                                                onClick={() => setActiveGenre(genre)}
-                                                className={`px-4 py-2 rounded-full border border-white/20 text-sm transition-all duration-300 ${activeGenre === genre
-                                                    ? 'bg-white text-black font-medium scale-105'
-                                                    : 'hover:bg-white/10 text-gray-300'
-                                                    }`}
-                                            >
-                                                {genre}
-                                            </button>
+                                {/* Interactive Genre Widget (Updated for Image Selection) */}
+                                <div className="w-full h-full bg-[#111] rounded-lg p-0 flex flex-col justify-between border border-white/5 hover:border-white/20 transition-colors relative overflow-hidden group">
+                                    {/* Grid Background Images */}
+                                    <div className="absolute inset-0 grid grid-cols-3">
+                                        {widgetImages.slice(0, 3).map((img, i) => (
+                                            <div key={i} className="relative w-full h-full overflow-hidden border-r border-white/10 last:border-r-0">
+                                                <img
+                                                    src={img}
+                                                    alt={`Option ${i}`}
+                                                    className={`w-full h-full object-cover transition-all duration-500 ${activeHighlightIndex === i
+                                                        ? 'grayscale-0 brightness-100 scale-105'
+                                                        : 'grayscale brightness-50 scale-100'
+                                                        }`}
+                                                />
+                                            </div>
                                         ))}
                                     </div>
 
-                                    <div className="relative z-10">
-                                        <div className="flex justify-between text-xs text-gray-300 mb-2">
-                                            <span>Generating {activeGenre} Vibe...</span>
-                                            <span>Processing</span>
-                                        </div>
-                                        <div className="h-1 w-full bg-black/40 backdrop-blur-sm rounded-full overflow-hidden">
-                                            <div className={`h-full w-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-full`}></div>
-                                            <div className={`h-full w-[85%] ${genreConfig[activeGenre].progressColor} absolute top-0 left-0 transition-all duration-500`}></div>
-                                        </div>
+                                    {/* Wrapper for Buttons (positioned top-left) */}
+                                    <div className="relative z-10 flex flex-wrap gap-2 p-8">
+                                        {(['A', 'B', 'C'] as const).map((label, i) => (
+                                            <button
+                                                key={label}
+                                                onClick={() => setActiveHighlightIndex(i)}
+                                                className={`w-10 h-10 rounded-full border border-white/20 text-sm font-bold transition-all duration-300 flex items-center justify-center ${activeHighlightIndex === i
+                                                    ? 'bg-white text-black scale-110 shadow-lg'
+                                                    : 'bg-black/40 text-gray-300 hover:bg-white/20 backdrop-blur-sm'
+                                                    }`}
+                                            >
+                                                {label}
+                                            </button>
+                                        ))}
                                     </div>
                                 </div>
                             </ScrollReveal>
 
                             <ScrollReveal delay={200} className="flex-1">
-                                <div className="w-full h-full bg-gradient-to-br from-indigo-900 to-black rounded-lg p-8 relative overflow-hidden group">
-                                    <img src={details.media.auraCard} className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay group-hover:scale-110 transition-transform duration-1000" alt="Texture" />
-                                    <div className="relative z-10 h-full flex items-center justify-center text-center">
-                                        <h5 className="font-serif text-4xl italic leading-tight" dangerouslySetInnerHTML={{ __html: details.aura.card2Text }}></h5>
+                                <div className="w-full h-full rounded-lg relative overflow-hidden group flex bg-black">
+                                    {/* Left Half - Top Image */}
+                                    <div className="w-1/2 h-full relative overflow-hidden">
+                                        <div
+                                            className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105"
+                                            style={{
+                                                backgroundImage: `url(${details.media.auraCard})`,
+                                                backgroundSize: '100% 200%',
+                                                backgroundPosition: 'center top',
+                                                backgroundRepeat: 'no-repeat'
+                                            }}
+                                        />
+                                        <div className="absolute inset-0 bg-black/20"></div>
+                                    </div>
+
+                                    {/* Right Half - Bottom Image */}
+                                    <div className="w-1/2 h-full relative overflow-hidden">
+                                        <div
+                                            className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105"
+                                            style={{
+                                                backgroundImage: `url(${details.media.auraCard})`,
+                                                backgroundSize: '100% 200%',
+                                                backgroundPosition: 'center bottom',
+                                                backgroundRepeat: 'no-repeat'
+                                            }}
+                                        />
+                                        <div className="absolute inset-0 bg-black/20"></div>
+                                    </div>
+
+                                    {/* Color Overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/80 to-purple-900/40 mix-blend-hard-light pointer-events-none"></div>
+
+                                    {/* Text Overlay */}
+                                    <div className="absolute inset-0 z-10 flex items-center justify-center text-center">
+                                        <h5 className="font-serif text-4xl italic leading-tight text-white drop-shadow-xl" dangerouslySetInnerHTML={{ __html: details.aura.card2Text }}></h5>
                                     </div>
                                 </div>
                             </ScrollReveal>
@@ -257,14 +303,9 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                                             <>
                                                 <div className="text-center mb-4 transition-all duration-500">
                                                     <h4 className="text-3xl font-serif mb-2 text-white">Welcome</h4>
-                                                    <p className="text-sm text-gray-400">Start creating.</p>
                                                 </div>
 
                                                 <div className="space-y-3 transition-all duration-500">
-                                                    <div className="h-14 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 flex items-center px-4 gap-3 text-gray-400">
-                                                        <Mic className="w-5 h-5" />
-                                                        <span>A cyber-noir jazz track...</span>
-                                                    </div>
                                                     <button
                                                         onClick={handleGenerate}
                                                         disabled={isGenerating}
@@ -273,7 +314,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                                                         {isGenerating ? (
                                                             <><Loader2 className="w-4 h-4 animate-spin" /> Creating...</>
                                                         ) : (
-                                                            "Generate"
+                                                            "이미지 생성"
                                                         )}
                                                     </button>
                                                 </div>
@@ -293,7 +334,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                                                 </div>
 
                                                 <div className="mb-6">
-                                                    <h4 className="text-2xl font-serif text-white mb-1">Cyber Noir Jazz</h4>
+                                                    <h4 className="text-2xl font-serif text-white mb-1">특정 매장 찾기</h4>
                                                     <p className="text-gray-400 text-sm">Generated</p>
                                                 </div>
 
@@ -318,7 +359,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                     <div className="order-1 lg:order-2">
                         <ScrollReveal>
                             <span className="block text-sm font-semibold uppercase tracking-wider mb-6 text-gray-400">{details.feature.subheading}</span>
-                            <h3 className="text-4xl md:text-6xl font-serif mb-8">
+                            <h3 className="text-4xl md:text-6xl font-serif mb-8 whitespace-pre-line">
                                 {details.feature.heading}
                             </h3>
                             <p className="text-gray-400 text-lg leading-relaxed max-w-md">
