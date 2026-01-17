@@ -1,6 +1,6 @@
 import type { Project, ProjectDetailContent } from '../../types';
-import mainHomeImg from '../../assets/Recycler/main_home.jpg';
-import mainCategoryImg from '../../assets/Recycler/main_category.jpg';
+import mainHomeImg from '../../assets/recycler/main_home.jpg';
+import mainCategoryImg from '../../assets/recycler/main_category.jpg';
 import heroImg from '../../assets/recycler/hero.avif';
 import cameraCaptureImg from '../../assets/recycler/camera_capture.jpg';
 import classificationResultImg from '../../assets/recycler/classification_result.jpg';
