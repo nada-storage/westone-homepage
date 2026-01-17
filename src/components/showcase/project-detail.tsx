@@ -3,7 +3,7 @@ import { DetailHeader } from "@/components/layout";
 import { ScrollReveal } from "@/components/interactive/scroll";
 import { Marquee } from "@/components/interactive/animations";
 import { ImageCarousel } from '@/components/interactive/carousel';
-import { Play, Mic, ArrowUpRight, Loader2, Pause, ArrowRight } from 'lucide-react';
+import { Play, ArrowUpRight, Loader2, Pause, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import type { ProjectDetailContent } from '../../types';
 import type { Project } from '../../types';
