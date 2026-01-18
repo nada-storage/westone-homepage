@@ -71,7 +71,7 @@ export const ShowcaseDisplay: React.FC<ShowcaseDisplayProps> = ({ activeProject 
 
                         {/* Desktop Mockup */}
                         {activeProject.foregroundType === 'desktop' && (
-                            <div className="relative w-full max-w-5xl aspect-video bg-black rounded-xl border-4 border-gray-800 shadow-2xl overflow-hidden">
+                            <div className={`relative w-full max-w-5xl ${config.aspectRatio || 'aspect-video'} bg-black rounded-xl border-4 border-gray-800 shadow-2xl overflow-hidden`}>
                                 <div className="w-full h-6 bg-gray-900 flex items-center px-4 space-x-2">
                                     <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
                                     <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>

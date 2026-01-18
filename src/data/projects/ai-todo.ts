@@ -1,5 +1,14 @@
-import type { Project } from '../../types';
-import type { ProjectDetailContent } from '../../types';
+import type { Project, ProjectDetailContent } from '../../types';
+import listCheckImg from '../../assets/ai-todo/list-check.png';
+import intro1Img from '../../assets/ai-todo/intro1.png';
+import intro2Img from '../../assets/ai-todo/intro2.png';
+import intro3Img from '../../assets/ai-todo/intro3.png';
+import aiInsertCloseImg from '../../assets/ai-todo/ai-insert-close.png';
+import aiInsertAfterImg from '../../assets/ai-todo/ai-insert-after.png';
+import setDirectInsertImg from '../../assets/ai-todo/set+direct-insert.png';
+import mainDarkImg from '../../assets/ai-todo/main-dark.png';
+import dateTimeSetImg from '../../assets/ai-todo/date-time-set.png';
+import alertImg from '../../assets/ai-todo/alert.png';
 
 export const AIToDoProject: Project = {
     id: '5',
@@ -12,30 +21,35 @@ export const AIToDoProject: Project = {
     image: 'https://images.unsplash.com/photo-1614149162883-504ce4d13909?auto=format&fit=crop&q=80&w=1000',
     color: '#FFFFFF',
     bgImage: 'https://images.unsplash.com/photo-1614850523060-8da1d56ae167?q=80&w=2560&auto=format&fit=crop',
-    foregroundImage: 'https://images.unsplash.com/photo-1616353071855-2c045c4458ae?q=80&w=800&auto=format&fit=crop',
+    foregroundImage: listCheckImg,
     foregroundType: 'desktop',
     theme: 'light',
     accentColor: '#6366F1',
     layoutConfig: {
         titleStyles: 'absolute top-[20%] left-[18%] text-left z-10',
         descriptionStyles: 'absolute bottom-[25%] left-[18%] text-left max-w-xs',
-        imageWrapperStyles: 'absolute top-1/2 -translate-y-1/2 right-[10%] w-[320px] md:w-[380px] rotate-[-6deg]',
+        imageWrapperStyles: 'absolute top-1/2 -translate-y-1/2 right-[10%] w-[400px] md:w-[480px]',
         enterAnimation: 'converge',
+        aspectRatio: 'aspect-auto',
     }
 };
 
 export const AIToDoDetails: ProjectDetailContent = {
     id: '5',
+    heroContainImages: true,
+    visionImageContain: true,
 
     media: {
-        hero: 'https://images.unsplash.com/photo-1614149162883-504ce4d13909?q=80&w=2070&auto=format&fit=crop',
+        hero: [intro1Img, intro2Img, intro3Img],
         visionMain: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2070&auto=format&fit=crop',
-        visionGrid1: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=2070&auto=format&fit=crop',
-        visionGrid2: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2070&auto=format&fit=crop',
-        auraBento: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070&auto=format&fit=crop',
+        visionGrid1: setDirectInsertImg,
+        visionGrid2: mainDarkImg,
+        auraBento: dateTimeSetImg,
         auraCard: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?q=80&w=2070&auto=format&fit=crop',
-        featureInit: 'https://images.unsplash.com/photo-1614149162883-504ce4d13909?q=80&w=2070&auto=format&fit=crop',
-        featureResult: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2070&auto=format&fit=crop'
+        featureInit: mainDarkImg,
+        featureResult: aiInsertAfterImg,
+        visionToggle1: aiInsertCloseImg,
+        visionToggle2: aiInsertAfterImg,
     },
 
     hero: {
@@ -63,7 +77,7 @@ export const AIToDoDetails: ProjectDetailContent = {
         subheading: 'Intelligent Task Management',
         heading: 'From chaos to clarity.',
         text: 'Work, Study, Health, Schedule 등 6개 카테고리로 자동 분류되고, 우선순위와 예상 소요 시간까지 AI가 분석합니다. 시스템 트레이 상주와 글로벌 단축키(Ctrl+Shift+T)로 언제든 빠르게 접근할 수 있습니다.',
-        bigText: 'Focus.',
+        bigText: 'Time\nSetting',
         card2Text: '"Just type,<br />AI handles the rest."'
     },
 
@@ -76,10 +90,10 @@ export const AIToDoDetails: ProjectDetailContent = {
     discovery: {
         heading: 'Every feature, designed for productivity.',
         items: [
-            { img: "https://images.unsplash.com/photo-1614149162883-504ce4d13909?q=80&w=2070&auto=format&fit=crop", title: "자연어 입력" },
-            { img: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2070&auto=format&fit=crop", title: "자동 분류" },
-            { img: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=2070&auto=format&fit=crop", title: "스마트 알림" },
-            { img: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2070&auto=format&fit=crop", title: "다크 모드" }
+            { img: aiInsertCloseImg, title: "자연어 입력" },
+            { img: intro1Img, title: "단축키 사용" },
+            { img: alertImg, title: "스마트 알림" },
+            { img: mainDarkImg, title: "다크 모드" }
         ]
     },
 
