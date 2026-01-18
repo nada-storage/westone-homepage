@@ -64,11 +64,15 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                 {Array.isArray(details.media.hero) ? (
                     <div className="w-full h-full grid grid-cols-3">
                         {details.media.hero.map((imgSrc, index) => (
-                            <div key={index} className="w-full h-full relative overflow-hidden group">
+                            <div key={index} className={`w-full h-full relative overflow-hidden group ${details.heroContainImages ? 'bg-[#a3a3a3]' : ''}`}>
                                 <img
                                     src={imgSrc}
                                     alt={`Hero ${index + 1}`}
-                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                    className={`w-full h-full transition-transform duration-1000 group-hover:scale-105 ${
+                                        details.heroContainImages
+                                            ? 'object-contain py-8'
+                                            : 'object-cover'
+                                    }`}
                                 />
                                 {/* Divider line */}
                                 {index < (details.media.hero as string[]).length - 1 && (
@@ -180,11 +184,15 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
 
                     <div className="md:col-span-8 space-y-8 relative z-10">
                         <ScrollReveal>
-                            <div className="relative aspect-[16/10] bg-neutral-900 rounded-lg overflow-hidden group px-24">
+                            <div className={`relative aspect-[16/10] bg-neutral-900 rounded-lg overflow-hidden group ${details.visionImageContain ? '' : 'px-24'}`}>
                                 <img
                                     src={isPlayingVision ? (details.media.visionToggle2 || details.media.visionGrid2) : (details.media.visionToggle1 || details.media.visionGrid1)}
                                     alt="Interface"
-                                    className={`object-cover w-full h-full rounded-lg transition-all duration-[3s] ease-in-out group-hover:scale-105 ${isPlayingVision ? 'opacity-100 object-top' : 'opacity-80 object-center'}`}
+                                    className={`w-full h-full rounded-lg transition-all duration-[3s] ease-in-out group-hover:scale-105 ${
+                                        details.visionImageContain && !isPlayingVision
+                                            ? 'object-contain object-left'
+                                            : `object-cover ${isPlayingVision ? 'opacity-100 object-top' : 'opacity-80 object-center'}`
+                                    }`}
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                                 <div className="absolute bottom-8 left-8 right-8">
@@ -258,14 +266,15 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                                 {/* Grid Background Images */}
                                 <div className="absolute inset-0 grid grid-cols-3">
                                     {widgetImages.slice(0, 3).map((img, i) => (
-                                        <div key={i} className="relative w-full h-full overflow-hidden border-r border-white/10 last:border-r-0">
+                                        <div key={i} className={`relative w-full h-full overflow-hidden border-r border-white/10 last:border-r-0 ${details.heroContainImages ? 'bg-[#a3a3a3]' : ''}`}>
                                             <img
                                                 src={img}
                                                 alt={`Option ${i}`}
-                                                className={`w-full h-full object-cover transition-all duration-500 ${activeHighlightIndex === i
-                                                    ? 'grayscale-0 brightness-100 scale-105'
-                                                    : 'grayscale brightness-50 scale-100'
-                                                    }`}
+                                                className={`w-full h-full transition-all duration-500 ${
+                                                    details.heroContainImages
+                                                        ? `object-contain py-4 ${activeHighlightIndex === i ? 'grayscale-0 brightness-100 scale-105' : 'grayscale brightness-50 scale-100'}`
+                                                        : `object-cover ${activeHighlightIndex === i ? 'grayscale-0 brightness-100 scale-105' : 'grayscale brightness-50 scale-100'}`
+                                                }`}
                                             />
                                         </div>
                                     ))}
@@ -292,13 +301,15 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                         {/* Card with text */}
                         <ScrollReveal delay={100}>
                             <div className="w-full aspect-[16/9] rounded-lg relative overflow-hidden group flex bg-black">
-                                {details.id === 'recycler' ? (
-                                    <div className="w-full h-full relative overflow-hidden">
-                                        <img
-                                            src={details.media.auraCard}
-                                            alt="Aura Card"
-                                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                                        />
+                                {details.id === 'recycler' || details.heroContainImages ? (
+                                    <div className={`w-full h-full relative overflow-hidden ${details.heroContainImages ? 'bg-indigo-950' : ''}`}>
+                                        {!details.heroContainImages && (
+                                            <img
+                                                src={details.media.auraCard}
+                                                alt="Aura Card"
+                                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                            />
+                                        )}
                                         <div className="absolute inset-0 bg-black/20"></div>
                                     </div>
                                 ) : (
@@ -334,7 +345,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                                 )}
 
                                 {/* Color Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/80 to-purple-900/40 mix-blend-hard-light pointer-events-none"></div>
+                                <div className={`absolute inset-0 pointer-events-none ${details.heroContainImages ? 'bg-gradient-to-br from-indigo-600/90 to-violet-800/90' : 'bg-gradient-to-br from-indigo-900/80 to-purple-900/40 mix-blend-hard-light'}`}></div>
 
                                 {/* Text Overlay */}
                                 <div className="absolute inset-0 z-10 flex items-center justify-center text-center">
@@ -348,7 +359,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                             <div className="w-full aspect-[4/3] bg-gray-100 rounded-lg overflow-hidden relative group">
                                 <img src={details.media.auraBento} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" alt="Moodboard" />
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <h4 className="font-serif text-5xl text-black/10 group-hover:text-black/30 transition-colors duration-500">{details.aura.bigText}</h4>
+                                    <h4 className="font-serif text-5xl text-black/10 group-hover:text-black/30 transition-colors duration-500 whitespace-pre-line text-center">{details.aura.bigText}</h4>
                                 </div>
                             </div>
                         </ScrollReveal>
@@ -360,7 +371,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                             <div className="w-full h-full min-h-[400px] bg-gray-100 rounded-lg overflow-hidden relative group">
                                 <img src={details.media.auraBento} className="w-full h-full object-contain group-hover:scale-105 transition-all duration-700" alt="Moodboard" />
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <h4 className="font-serif text-8xl text-black/10 group-hover:text-black/30 transition-colors duration-500">{details.aura.bigText}</h4>
+                                    <h4 className="font-serif text-8xl text-black/10 group-hover:text-black/30 transition-colors duration-500 whitespace-pre-line text-center">{details.aura.bigText}</h4>
                                 </div>
                             </div>
                         </ScrollReveal>
@@ -372,14 +383,15 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                                     {/* Grid Background Images */}
                                     <div className="absolute inset-0 grid grid-cols-3">
                                         {widgetImages.slice(0, 3).map((img, i) => (
-                                            <div key={i} className="relative w-full h-full overflow-hidden border-r border-white/10 last:border-r-0">
+                                            <div key={i} className={`relative w-full h-full overflow-hidden border-r border-white/10 last:border-r-0 ${details.heroContainImages ? 'bg-[#a3a3a3]' : ''}`}>
                                                 <img
                                                     src={img}
                                                     alt={`Option ${i}`}
-                                                    className={`w-full h-full object-cover transition-all duration-500 ${activeHighlightIndex === i
-                                                        ? 'grayscale-0 brightness-100 scale-105'
-                                                        : 'grayscale brightness-50 scale-100'
-                                                        }`}
+                                                    className={`w-full h-full transition-all duration-500 ${
+                                                        details.heroContainImages
+                                                            ? `object-contain py-4 ${activeHighlightIndex === i ? 'grayscale-0 brightness-100 scale-105' : 'grayscale brightness-50 scale-100'}`
+                                                            : `object-cover ${activeHighlightIndex === i ? 'grayscale-0 brightness-100 scale-105' : 'grayscale brightness-50 scale-100'}`
+                                                    }`}
                                                 />
                                             </div>
                                         ))}
@@ -405,13 +417,15 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
 
                             <ScrollReveal delay={200} className="flex-1">
                                 <div className="w-full h-full rounded-lg relative overflow-hidden group flex bg-black">
-                                    {details.id === 'recycler' ? (
-                                        <div className="w-full h-full relative overflow-hidden">
-                                            <img
-                                                src={details.media.auraCard}
-                                                alt="Aura Card"
-                                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                                            />
+                                    {details.id === 'recycler' || details.heroContainImages ? (
+                                        <div className={`w-full h-full relative overflow-hidden ${details.heroContainImages ? 'bg-indigo-950' : ''}`}>
+                                            {!details.heroContainImages && (
+                                                <img
+                                                    src={details.media.auraCard}
+                                                    alt="Aura Card"
+                                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                                />
+                                            )}
                                             <div className="absolute inset-0 bg-black/20"></div>
                                         </div>
                                     ) : (
@@ -447,7 +461,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                                     )}
 
                                     {/* Color Overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/80 to-purple-900/40 mix-blend-hard-light pointer-events-none"></div>
+                                    <div className={`absolute inset-0 pointer-events-none ${details.heroContainImages ? 'bg-gradient-to-br from-indigo-600/90 to-violet-800/90' : 'bg-gradient-to-br from-indigo-900/80 to-purple-900/40 mix-blend-hard-light'}`}></div>
 
                                     {/* Text Overlay */}
                                     <div className="absolute inset-0 z-10 flex items-center justify-center text-center">
@@ -471,12 +485,10 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
                                     {/* Background Image - Changes on Generate */}
                                     <div className="absolute inset-0 transition-opacity duration-1000">
                                         <img
-                                            src={hasGenerated
-                                                ? details.media.featureResult // Result Image (Vibrant Club)
-                                                : details.media.featureInit // Initial Image (Abstract)
-                                            }
-                                            className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 ${hasGenerated ? 'opacity-100' : 'opacity-40 mix-blend-overlay'
-                                                }`}
+                                            src={details.media.featureInit}
+                                            className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 ${
+                                                hasGenerated ? 'opacity-100' : 'opacity-40 mix-blend-overlay'
+                                            }`}
                                             alt="Background"
                                         />
                                     </div>
@@ -564,6 +576,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ details, nextProje
 
                 <ImageCarousel
                     items={details.discovery.items}
+                    containImages={details.heroContainImages}
                 />
             </section>
 

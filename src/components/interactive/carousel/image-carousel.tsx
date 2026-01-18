@@ -5,7 +5,12 @@ interface CarouselItem {
     title: string;
 }
 
-export const ImageCarousel: React.FC<{ items: CarouselItem[] }> = ({ items }) => {
+interface ImageCarouselProps {
+    items: CarouselItem[];
+    containImages?: boolean;
+}
+
+export const ImageCarousel: React.FC<ImageCarouselProps> = ({ items, containImages = false }) => {
     // Duplicate items 4 times to ensure content is wider than any screen 
     // and loops seamlessly. The keyframe animation translates -50%, 
     // so we need 2 full sets of visual content to make the loop invisible.
@@ -18,11 +23,15 @@ export const ImageCarousel: React.FC<{ items: CarouselItem[] }> = ({ items }) =>
                 {displayItems.map((item, index) => (
                     <div
                         key={index}
-                        className="mx-4 relative w-[280px] md:w-[400px] h-[380px] md:h-[500px] flex-shrink-0 bg-neutral-900 rounded-lg overflow-hidden group cursor-pointer"
+                        className={`mx-4 relative w-[280px] md:w-[400px] h-[380px] md:h-[500px] flex-shrink-0 rounded-lg overflow-hidden group cursor-pointer ${containImages ? 'bg-[#a3a3a3]' : 'bg-neutral-900'}`}
                     >
                         <img
                             src={item.img}
-                            className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700"
+                            className={`absolute inset-0 w-full h-full transition-all duration-700 ${
+                                containImages
+                                    ? 'object-contain p-4 opacity-100 group-hover:scale-105'
+                                    : 'object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105'
+                            }`}
                             alt={item.title}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>

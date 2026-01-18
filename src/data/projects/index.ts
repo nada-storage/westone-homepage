@@ -27,12 +27,12 @@ export const PROJECTS: Project[] = [
     AIToDoProject,
     ballpangProject,
     recyclerProject,
-    upworkProject,
-    atlanticProject,
-    uberProject,
-    calvinKleinProject,
-    pitchProject,
-    headspaceProject,
+    // upworkProject,
+    // atlanticProject,
+    // uberProject,
+    // calvinKleinProject,
+    // pitchProject,
+    // headspaceProject,
 ];
 
 export const PROJECT_DETAILS: Record<string, ProjectDetailContent> = {

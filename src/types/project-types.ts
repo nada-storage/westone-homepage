@@ -61,6 +61,7 @@ export interface LayoutConfig {
   descriptionStyles: string;
   imageWrapperStyles: string;
   enterAnimation?: string;
+  aspectRatio?: string;
 }
 
 /**
@@ -103,6 +104,10 @@ export interface ProjectDetailContent {
     visionToggle2?: string;
     widgetImages?: string[];
   };
+  /** 히어로 이미지 배열일 때 object-contain 스타일 적용 및 패딩 추가 여부 */
+  heroContainImages?: boolean;
+  /** Vision 토글 이미지를 object-contain + object-left로 렌더링 (패딩 없음) */
+  visionImageContain?: boolean;
   hero: {
     title: string;
     type: string;
