@@ -14,13 +14,13 @@ export { headspaceProject, headspaceDetails } from './headspace';
 // Re-import for aggregation
 import { ballpangProject, ballpangDetails } from './ballpang';
 import { recyclerProject, recyclerDetails } from './recycler';
-import { upworkProject, upworkDetails } from './upwork';
-import { atlanticProject, atlanticDetails } from './atlantic';
+import { upworkDetails } from './upwork';
+import { atlanticDetails } from './atlantic';
 import { AIToDoProject, AIToDoDetails } from './ai-todo';
-import { uberProject, uberDetails } from './uber';
-import { calvinKleinProject, calvinKleinDetails } from './calvin-klein';
-import { pitchProject, pitchDetails } from './pitch';
-import { headspaceProject, headspaceDetails } from './headspace';
+import { uberDetails } from './uber';
+import { calvinKleinDetails } from './calvin-klein';
+import { pitchDetails } from './pitch';
+import { headspaceDetails } from './headspace';
 
 // Aggregated exports
 export const PROJECTS: Project[] = [
