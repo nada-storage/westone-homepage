@@ -7,6 +7,7 @@
  */
 export const ForegroundType = {
   Mobile: 'mobile',
+  Tablet: 'tablet',
   Desktop: 'desktop',
   Image: 'image',
   None: 'none',
@@ -80,7 +81,8 @@ export interface Project {
   bgImage?: string;
   foregroundImage?: string;
   secondaryImage?: string;
-  foregroundType?: 'mobile' | 'desktop' | 'image' | 'none';
+  showcaseImages?: string[];
+  foregroundType?: 'mobile' | 'tablet' | 'desktop' | 'image' | 'none';
   theme?: 'light' | 'dark';
   accentColor?: string;
   layoutConfig?: LayoutConfig;
@@ -98,6 +100,7 @@ export interface ProjectDetailContent {
     visionGrid2: string;
     auraBento: string;
     auraCard: string;
+    auraCard2?: string;
     featureInit: string;
     featureResult: string;
     visionToggle1?: string;

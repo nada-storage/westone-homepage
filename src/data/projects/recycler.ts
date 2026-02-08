@@ -19,7 +19,7 @@ export const recyclerProject: Project = {
     description: 'AI 이미지 인식으로 분리배출 방법을 안내하고 참여형 기능으로 실천을 습관화하는 모바일 앱',
     year: '2025',
     tags: ['AI', 'Mobile App', 'Environment', 'Image Classification'],
-    image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=1000',
+    image: heroImg,
     color: '#1B3D1F',
     bgImage: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2560&auto=format&fit=crop',
     foregroundImage: mainHomeImg,

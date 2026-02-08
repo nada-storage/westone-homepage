@@ -20,7 +20,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({ news }) => {
                     <img
                         src={news.image}
                         alt={news.title}
-                        className={`object-cover w-full h-full transition-transform duration-700 ease-out ${isHovered ? 'scale-105' : 'scale-100'}`}
+                        className={`object-cover w-full h-full transition-all duration-700 ease-out ${isHovered ? 'scale-105 grayscale-0' : 'scale-100 grayscale'}`}
                         loading="lazy"
                     />
                 )}
@@ -33,7 +33,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({ news }) => {
 
             <div className="flex flex-col gap-1 px-1">
                 <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-2 mb-2">
-                    <h3 className="text-2xl md:text-3xl font-serif font-medium text-white group-hover:underline decoration-1 underline-offset-4">
+                    <h3 className="text-2xl md:text-3xl font-serif font-medium text-white group-hover:underline decoration-1 underline-offset-4 whitespace-pre-line">
                         {news.title}
                     </h3>
                     <span className="hidden md:inline-block text-xs font-medium tracking-widest uppercase text-gray-500">

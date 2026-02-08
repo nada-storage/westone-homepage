@@ -2,6 +2,11 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, MotionValue, animate, type PanInfo } from 'framer-motion';
 import { useCursor } from '../../../context/cursor-context';
 
+import portraitYjt from '../../../assets/what-we-do/portrait-yjt.jpg';
+import portraitPgj from '../../../assets/what-we-do/portrait-pgj.jpg';
+import portraitLjm from '../../../assets/what-we-do/portrait-ljm.jpg';
+import portraitPhj from '../../../assets/what-we-do/portrait-phj.jpg';
+
 interface Testimonial {
     id: number;
     quote: string;
@@ -16,28 +21,28 @@ const testimonials: Testimonial[] = [
         quote: "사용자가 보는 모든 픽셀에는\n고민이 담겨있어야 한다고 생각합니다.\n인터랙션 하나하나가 경험을 만듭니다.",
         author: "박건준",
         role: "Frontend Developer",
-        image: "https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=400&auto=format&fit=crop"
+        image: portraitPgj
     },
     {
         id: 2,
         quote: "안정적이고 확장 가능한 시스템 설계가\n좋은 서비스의 기반입니다.\n눈에 보이지 않지만 가장 중요한 부분이죠.",
         author: "박희정",
         role: "Backend Developer",
-        image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=400&auto=format&fit=crop"
+        image: portraitPhj
     },
     {
         id: 3,
         quote: "프론트부터 백엔드까지 전체를 보면\n더 나은 의사결정을 할 수 있습니다.\n효율과 품질, 둘 다 잡을 수 있어요.",
         author: "양종태",
         role: "Full Stack Developer",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop"
+        image: portraitYjt
     },
     {
         id: 4,
         quote: "빠른 배포와 안정적인 운영,\n둘 모두를 잡는게 제 목표입니다.\n그것 만으로도 다른개발자들이\n코드에만 집중할 수 있도록 해주죠.",
         author: "이지민",
         role: "DevOps Engineer",
-        image: "https://images.unsplash.com/photo-1531384441138-2736e62e0919?q=80&w=400&auto=format&fit=crop"
+        image: portraitLjm
     }
 ];
 
@@ -172,11 +177,11 @@ const MobileTeamCard: React.FC<MobileTeamCardProps> = ({ item, index }) => {
             transition={{ duration: 0.6, delay: index * 0.1 }}
         >
             <div className="w-[65vw] max-w-[280px]">
-                <div className="w-full aspect-square overflow-hidden rounded-sm bg-gray-900 shadow-xl mb-4">
+                <div className="w-full aspect-[3/4] overflow-hidden rounded-sm bg-black shadow-xl mb-4">
                     <img
                         src={item.image}
                         alt={item.author}
-                        className="w-full h-full object-cover grayscale opacity-90"
+                        className="w-full h-full object-contain grayscale opacity-90"
                         draggable={false}
                     />
                 </div>
@@ -246,7 +251,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({ item, index, x, totalCount 
                 Removed 'once: true' so it re-triggers every time the item enters the viewport.
             */}
             <motion.div
-                className="w-full h-[320px] overflow-hidden rounded-sm bg-gray-900 shadow-2xl"
+                className="w-full h-[420px] overflow-hidden rounded-sm bg-black shadow-2xl"
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.1 }}
@@ -255,7 +260,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({ item, index, x, totalCount 
                 <img
                     src={item.image}
                     alt={item.author}
-                    className="w-full h-full object-cover grayscale opacity-90 transition-all duration-500 hover:grayscale-0 hover:opacity-100"
+                    className="w-full h-full object-contain grayscale opacity-90 transition-all duration-500 hover:grayscale-0 hover:opacity-100"
                     draggable={false} // Prevent native image drag
                 />
             </motion.div>

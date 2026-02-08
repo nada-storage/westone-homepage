@@ -20,7 +20,7 @@ export const ballpangProject: Project = {
     description: '야구장 통합 정보 플랫폼',
     year: '2025',
     tags: ['Mobile App', 'Flutter', 'Sports Tech'],
-    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=1000',
+    image: heroImg,
     color: '#FF6B35',
     bgImage: 'https://images.unsplash.com/photo-1557683311-eac922347aa1?q=80&w=2560&auto=format&fit=crop',
     foregroundImage: intro0Img,
