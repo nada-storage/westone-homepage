@@ -4,7 +4,7 @@ import { NewsCard } from "@/components/common/cards";
 import { NEWS_ITEMS } from '../../../data/constants/news';
 import type { NewsItem } from '../../../types';
 
-const CATEGORIES = ['All', 'Case Study'];
+const CATEGORIES = ['All', 'Milestone', 'Award'];
 
 const NewsSection: React.FC = () => {
     const [activeCategory, setActiveCategory] = useState('All');

@@ -29,39 +29,93 @@ export const ShowcaseDisplay: React.FC<ShowcaseDisplayProps> = ({ activeProject 
 
                 {/* --- IMAGE AREA --- */}
                 {activeProject.foregroundImage && activeProject.foregroundType !== 'none' && (
-                    <div className={`z-0 ${config.imageWrapperStyles} ${getAnimClass(config.enterAnimation, 'img')}`}>
+                    <div className={`z-0 ${config.imageWrapperStyles} ${activeProject.foregroundType === 'tablet' ? 'animate-soft-drop-img' : getAnimClass(config.enterAnimation, 'img')}`}>
 
                         {/* Mobile Mockup */}
                         {activeProject.foregroundType === 'mobile' && (
                             <div className="relative">
-                                {/* Secondary (Background) Mockup - Rendered First to be Behind */}
+                                {/* Triple Phone Layout */}
+                                {activeProject.showcaseImages && activeProject.showcaseImages.length >= 3 ? (
+                                    <div className="flex items-center -space-x-8 md:-space-x-12">
+                                        {activeProject.showcaseImages.map((img, index) => (
+                                            <div
+                                                key={index}
+                                                className="relative w-[180px] md:w-[220px] aspect-[9/19] bg-black rounded-[2.5rem] border-[6px] border-gray-900 shadow-2xl overflow-hidden transition-transform duration-700 ease-out"
+                                                style={{ zIndex: index === 1 ? 10 : 5 - Math.abs(index - 1), transform: index === 1 ? 'scale(1.05)' : 'scale(0.95)' }}
+                                            >
+                                                <div className="absolute top-0 w-full h-6 bg-black z-20 rounded-b-xl flex justify-center">
+                                                    <div className="w-16 h-4 bg-black rounded-b-lg"></div>
+                                                </div>
+                                                <img src={img} alt={`Mockup ${index + 1}`} className="w-full h-full object-cover" />
+                                                <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-white/5 to-transparent pointer-events-none" />
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <>
+                                        {/* Secondary (Background) Mockup - Rendered First to be Behind */}
+                                        {activeProject.secondaryImage && (
+                                            <div
+                                                className="absolute top-0 left-0 w-[280px] md:w-[340px] aspect-[9/19] bg-black rounded-[3rem] border-8 border-gray-900 shadow-2xl overflow-hidden transition-transform duration-700 ease-out"
+                                                style={{
+                                                    transform: 'translate(40%, 10%) rotate(12deg) scale(0.9)',
+                                                    zIndex: -1
+                                                }}
+                                            >
+                                                <div className="absolute top-0 w-full h-8 bg-black z-20 rounded-b-xl mb-2 flex justify-center">
+                                                    <div className="w-20 h-5 bg-black rounded-b-lg"></div>
+                                                </div>
+                                                <img
+                                                    src={activeProject.secondaryImage}
+                                                    alt="Secondary Mockup"
+                                                    className="w-full h-full object-cover blur-[2px]"
+                                                />
+                                            </div>
+                                        )}
+
+                                        {/* Main (Foreground) Mockup */}
+                                        <div className="relative w-[280px] md:w-[340px] aspect-[9/19] bg-black rounded-[3rem] border-8 border-gray-900 shadow-2xl overflow-hidden z-10">
+                                            <div className="absolute top-0 w-full h-8 bg-black z-20 rounded-b-xl mb-2 flex justify-center">
+                                                <div className="w-20 h-5 bg-black rounded-b-lg"></div>
+                                            </div>
+                                            <img
+                                                src={activeProject.foregroundImage}
+                                                alt="App Mockup"
+                                                className="w-full h-full object-cover"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-white/10 to-transparent pointer-events-none" />
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Tablet Mockup */}
+                        {activeProject.foregroundType === 'tablet' && (
+                            <div className="relative">
+                                {/* Secondary (Background) Tablet */}
                                 {activeProject.secondaryImage && (
                                     <div
-                                        className="absolute top-0 left-0 w-[280px] md:w-[340px] aspect-[9/19] bg-black rounded-[3rem] border-8 border-gray-900 shadow-2xl overflow-hidden transition-transform duration-700 ease-out"
+                                        className="absolute top-0 left-0 w-[380px] md:w-[500px] aspect-[4/3] bg-black rounded-[1.5rem] border-[6px] border-gray-800 shadow-2xl overflow-hidden transition-transform duration-700 ease-out"
                                         style={{
-                                            transform: 'translate(40%, 10%) rotate(12deg) scale(0.9)',
+                                            transform: 'translate(40%, -15%) rotate(6deg) scale(0.9)',
                                             zIndex: -1
                                         }}
                                     >
-                                        <div className="absolute top-0 w-full h-8 bg-black z-20 rounded-b-xl mb-2 flex justify-center">
-                                            <div className="w-20 h-5 bg-black rounded-b-lg"></div>
-                                        </div>
                                         <img
                                             src={activeProject.secondaryImage}
-                                            alt="Secondary Mockup"
-                                            className="w-full h-full object-cover blur-[2px]"
+                                            alt="Secondary Tablet"
+                                            className="w-full h-full object-cover blur-[1px]"
                                         />
+                                        <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-white/5 to-transparent pointer-events-none" />
                                     </div>
                                 )}
 
-                                {/* Main (Foreground) Mockup */}
-                                <div className="relative w-[280px] md:w-[340px] aspect-[9/19] bg-black rounded-[3rem] border-8 border-gray-900 shadow-2xl overflow-hidden z-10">
-                                    <div className="absolute top-0 w-full h-8 bg-black z-20 rounded-b-xl mb-2 flex justify-center">
-                                        <div className="w-20 h-5 bg-black rounded-b-lg"></div>
-                                    </div>
+                                {/* Main (Foreground) Tablet */}
+                                <div className="relative w-[380px] md:w-[500px] aspect-[4/3] bg-black rounded-[1.5rem] border-[6px] border-gray-800 shadow-2xl overflow-hidden z-10">
                                     <img
                                         src={activeProject.foregroundImage}
-                                        alt="App Mockup"
+                                        alt="Tablet Mockup"
                                         className="w-full h-full object-cover"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-white/10 to-transparent pointer-events-none" />
@@ -100,8 +154,25 @@ export const ShowcaseDisplay: React.FC<ShowcaseDisplayProps> = ({ activeProject 
                     </div>
                 )}
 
+                {/* --- SCATTERED PHOTOS (Tablet only) --- */}
+                {activeProject.foregroundType === 'tablet' && activeProject.showcaseImages && activeProject.showcaseImages.length >= 3 && (
+                    <div className="z-5 absolute top-[58%] left-[21%] animate-pop-in-img">
+                        <div className="relative w-[500px] h-[280px]">
+                            <div className="absolute top-0 left-0 w-[140px] md:w-[160px] rounded-xl overflow-hidden shadow-lg rotate-[-4deg] opacity-90">
+                                <img src={activeProject.showcaseImages[0]} alt="Photo 1" className="w-full h-full object-cover aspect-[4/3]" />
+                            </div>
+                            <div className="absolute top-[20px] left-[170px] md:left-[180px] w-[130px] md:w-[150px] rounded-xl overflow-hidden shadow-lg rotate-[3deg] opacity-85">
+                                <img src={activeProject.showcaseImages[1]} alt="Photo 2" className="w-full h-full object-cover aspect-[3/4]" />
+                            </div>
+                            <div className="absolute top-[10px] left-[310px] md:left-[340px] w-[120px] md:w-[140px] rounded-xl overflow-hidden shadow-lg rotate-[-2deg] opacity-80">
+                                <img src={activeProject.showcaseImages[2]} alt="Photo 3" className="w-full h-full object-cover aspect-[4/3]" />
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {/* --- TITLE --- */}
-                <div className={`z-10 ${config.titleStyles} ${getAnimClass(config.enterAnimation, 'title')}`}>
+                <div className={`z-10 ${config.titleStyles} ${activeProject.foregroundType === 'tablet' ? 'animate-converge' : getAnimClass(config.enterAnimation, 'title')}`}>
                     <h1
                         className={`font-serif text-5xl md:text-7xl lg:text-9xl leading-[0.9] tracking-tight ${textColor}`}
                         style={{ textShadow: isLight ? '0 10px 40px rgba(0,0,0,0.3)' : 'none' }}
@@ -111,7 +182,7 @@ export const ShowcaseDisplay: React.FC<ShowcaseDisplayProps> = ({ activeProject 
                 </div>
 
                 {/* --- DESCRIPTION & TAGS --- */}
-                <div className={`z-10 ${config.descriptionStyles} ${getAnimClass(config.enterAnimation, 'desc')}`}>
+                <div className={`z-10 ${config.descriptionStyles} ${activeProject.foregroundType === 'tablet' ? 'animate-cross-fade-delay' : getAnimClass(config.enterAnimation, 'desc')}`}>
                     <p
                         className={`text-lg md:text-xl font-medium leading-relaxed mb-4 ${subTextColor} whitespace-pre-line`}
                     >

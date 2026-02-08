@@ -1,0 +1,106 @@
+import type { Project, ProjectDetailContent } from '../../types';
+
+import menuCreate from '../../assets/freekiosk/menu-create.png';
+import posDetail from '../../assets/freekiosk/pos-detail.png';
+import order1 from '../../assets/freekiosk/order1.png';
+import order2 from '../../assets/freekiosk/order2.png';
+import order2Plus from '../../assets/freekiosk/order2-plus.png';
+import order3 from '../../assets/freekiosk/order3.png';
+import tableSet from '../../assets/freekiosk/table-set.png';
+import checkPage from '../../assets/freekiosk/check-page.png';
+
+import kitchen1Plus from '../../assets/freekiosk/kitchen1-plus.png';
+import usePos from '../../assets/freekiosk/use-pos.jpg';
+import useQr from '../../assets/freekiosk/use-qr.jpg';
+import pilot from '../../assets/freekiosk/pilot.jpg';
+import hero from '../../assets/freekiosk/hero.png';
+
+export const freeKioskProject: Project = {
+    id: 'westone-kiosk',
+    name: 'FreeKiosk',
+    client: '자체 프로젝트',
+    description: '소상공인을 위한 무료 셀프 키오스크\n주방 디스플레이 · POS 통합 태블릿 앱',
+    year: '2025',
+    tags: ['Tablet App', 'Flutter', 'Firebase', 'POS'],
+    image: pilot,
+    color: '#2563EB',
+    bgImage: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2560&auto=format&fit=crop',
+    foregroundImage: menuCreate,
+    secondaryImage: posDetail,
+    showcaseImages: [pilot, usePos, useQr],
+    foregroundType: 'tablet',
+    theme: 'dark',
+    accentColor: '#2563EB',
+    layoutConfig: {
+        titleStyles: 'absolute top-[15%] left-[20%] text-left w-full',
+        descriptionStyles: 'absolute bottom-[15%] right-[20%] text-right max-w-md',
+        imageWrapperStyles: 'absolute top-[15%] right-[15%]',
+        enterAnimation: 'fade-up',
+    }
+};
+
+export const freeKioskDetails: ProjectDetailContent = {
+    id: 'westone-kiosk',
+    media: {
+        hero: hero,
+        visionMain: useQr,
+        visionToggle1: menuCreate,
+        visionToggle2: posDetail,
+        visionGrid1: kitchen1Plus,
+        visionGrid2: checkPage,
+        auraBento: tableSet,
+        auraCard: usePos,
+        auraCard2: useQr,
+        featureInit: order1,
+        featureResult: order2Plus,
+        widgetImages: [order2, order1, order3]
+    },
+    visionImageContain: true,
+    hero: {
+        title: 'FreeKiosk',
+        type: 'Tablet Kiosk Platform',
+        stage: 'Launch',
+        deliverables: 'Tablet App, KDS, POS, Admin Dashboard'
+    },
+    intro: {
+        text: `소상공인을 위한
+무료 셀프 주문 키오스크.
+QR 스캔 한 번으로
+주문부터 주방관리, 매출 분석까지
+매장운영을 완성합니다.`
+    },
+    vision: {
+        heading: '매장 운영,\n태블릿 하나로.',
+        text: '고객은 테이블 QR 코드를 스캔해 메뉴를 탐색하고 바로 주문합니다. 주문은 실시간으로 주방 디스플레이에 표시되고, POS 화면에서 테이블별 결제를 처리합니다. 관리자 대시보드에서는 메뉴·카테고리·테이블 설정부터 매출 리포트까지 한곳에서 관리할 수 있습니다.',
+        image1Title: 'QR 주문',
+        image1Subtitle: 'Self-Order',
+        image3HoverText: '매출 리포트'
+    },
+    marquee: 'Self-Order • Kitchen Display • POS • QR Code • Real-time • Revenue • ',
+    aura: {
+        subheading: '끊김 없는 매장 흐름',
+        heading: '주문에서 결제까지,\n하나의 흐름.',
+        text: '고객 QR 주문 → 주방 디스플레이 수신 → 조리 상태 업데이트 → POS 결제 처리. 모든 단계가 Firebase 실시간 동기화로 연결되어 별도 장비 없이 태블릿만으로 운영할 수 있습니다. 테이블 합석·이동, 부분 결제 등 실제 매장에서 필요한 기능을 모두 지원합니다.',
+        bigText: 'Table.\nSetting.',
+        card2Text: '"실제 매장이<br>증명하는 안정성"'
+    },
+    feature: {
+        subheading: '실시간 주방 연동',
+        heading: '주문 접수부터\n조리 완료까지.',
+        text: '주문이 들어오면 주방 디스플레이에 즉시 표시되고, 조리 상태를 접수 → 조리 중 → 완료로 업데이트합니다. 새 주문 알림 사운드, 메뉴별 수량 집계, 주문 이력 조회까지 주방 운영에 필요한 모든 것을 제공합니다.'
+    },
+    discovery: {
+        heading: '매장 운영의 모든 순간을 위해',
+        items: [
+            { img: order3, title: '셀프 주문' },
+            { img: posDetail, title: 'POS 결제' },
+            { img: menuCreate, title: '메뉴 관리' },
+            { img: tableSet, title: '테이블 설정' }
+        ]
+    },
+    stats: {
+        stat1: { value: '4', label: '통합 모듈 (주문·주방·POS·관리)' },
+        stat2: { value: '0원', label: '소상공인 이용 비용' },
+        stat3: { value: 'Real-time', label: 'Firebase 실시간 동기화' }
+    }
+};

@@ -83,7 +83,7 @@ const MobileNewsCard: React.FC<{ news: NewsItem; index: number }> = ({ news, ind
 
         {news.image && (
             <div className="w-full h-20 rounded-lg overflow-hidden mb-3 bg-gray-100">
-                <img src={news.image} alt="" className="w-full h-full object-cover" />
+                <img src={news.image} alt="" className="w-full h-full object-cover grayscale" />
             </div>
         )}
 
@@ -259,7 +259,7 @@ const DesktopMenuSection: React.FC<MenuSectionProps> = ({ displayProject, onProj
 
                                 {news.image && (
                                     <div className="w-full h-24 rounded-lg overflow-hidden mb-4 bg-gray-100">
-                                        <img src={news.image} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                                        <img src={news.image} alt="" className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
                                     </div>
                                 )}
 

@@ -18,7 +18,7 @@ export const AIToDoProject: Project = {
 스마트 할일 관리 데스크톱 앱`,
     year: '2025',
     tags: ['Desktop App', 'AI/LLM', 'Electron'],
-    image: 'https://images.unsplash.com/photo-1614149162883-504ce4d13909?auto=format&fit=crop&q=80&w=1000',
+    image: mainDarkImg,
     color: '#FFFFFF',
     bgImage: 'https://images.unsplash.com/photo-1614850523060-8da1d56ae167?q=80&w=2560&auto=format&fit=crop',
     foregroundImage: listCheckImg,
